@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc, asc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, conversations, messages, models, systemPrompts, documents } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,51 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Conversation queries
+export async function getUserConversations(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(conversations).where(eq(conversations.userId, userId)).orderBy(desc(conversations.updatedAt));
+}
+
+export async function getConversationWithMessages(conversationId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(conversations).where(eq(conversations.id, conversationId)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+// Message queries
+export async function addMessage(conversationId: number, role: string, content: string) {
+  const db = await getDb();
+  if (!db) throw new Error('Database not available');
+  const result = await db.insert(messages).values({
+    conversationId,
+    role: role as any,
+    content,
+  });
+  return result;
+}
+
+// Model queries
+export async function getActiveModels() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(models).where(eq(models.isActive, true));
+}
+
+// System prompts queries
+export async function getSystemPrompts() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(systemPrompts).where(eq(systemPrompts.isActive, true));
+}
+
+// Document queries
+export async function getUserDocuments(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(documents).where(eq(documents.userId, userId)).orderBy(desc(documents.createdAt));
+}
+
+// TODO: add more feature queries here as your schema grows.

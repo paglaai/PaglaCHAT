@@ -1,5 +1,27 @@
 {
   "version": "7",
   "dialect": "mysql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1766538366703,
+      "tag": "0000_third_radioactive_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1766538490580,
+      "tag": "0001_futuristic_texas_twister",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1766538503406,
+      "tag": "0002_worthless_wong",
+      "breakpoints": true
+    }
+  ]
 }

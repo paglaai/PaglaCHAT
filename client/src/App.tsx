@@ -4,15 +4,39 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import Chat from "./pages/Chat";
+import { useAuth } from "./_core/hooks/useAuth";
+import { Loader2 } from "lucide-react";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-foreground mb-4">TogetherChat</h1>
+          <p className="text-lg text-muted-foreground mb-8">Multi-Model AI Chat Application</p>
+          <a href="/api/oauth/login" className="inline-block bg-accent text-accent-foreground px-8 py-3 font-semibold hover:opacity-90">
+            Sign In
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/ "} component={Chat} />
       <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
   );
