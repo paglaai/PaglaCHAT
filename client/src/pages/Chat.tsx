@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Send, Plus, Trash2, Archive } from "lucide-react";
+import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut } from "lucide-react";
 import { Streamdown } from "streamdown";
 
 interface Conversation {
@@ -144,6 +144,12 @@ export default function Chat() {
         <div className="p-6 border-b border-border">
           <h1 className="text-2xl font-bold text-foreground">TogetherChat</h1>
           <p className="text-sm text-muted-foreground mt-1">Multi-Model AI Chat</p>
+          {user && (
+            <div className="mt-4 pt-4 border-t border-border text-xs">
+              <p className="font-semibold text-foreground truncate">{user.name}</p>
+              <p className="text-muted-foreground truncate">{user.email}</p>
+            </div>
+          )}
         </div>
 
         {/* New Conversation */}

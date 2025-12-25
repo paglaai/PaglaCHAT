@@ -2,8 +2,8 @@ import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { getUserConversations, getConversationWithMessages, addMessage, getActiveModels, getSystemPrompts, getUserDocuments } from "../db";
 import { getDb } from "../db";
-import { conversations, messages, models, systemPrompts } from "../../drizzle/schema";
-import { eq, desc } from "drizzle-orm";
+import { conversations, messages, models, systemPrompts, documents, documentChunks } from "../../drizzle/schema";
+import { eq, desc, inArray } from "drizzle-orm";
 import { invokeLLM } from "../_core/llm";
 
 export const chatRouter = router({
@@ -106,18 +106,47 @@ export const chatRouter = router({
         }
       }
 
-      // Format messages for LLM
-      const llmMessages = [
-        { role: "system" as const, content: systemPrompt },
-        ...history.map((msg: any) => ({
-          role: msg.role as "user" | "assistant" | "system" | "tool",
-          content: msg.content as string,
-        })),
-      ];
+      // Retrieve relevant document chunks for RAG if documents exist
+      let ragContext = "";
+      try {
+        const userDocs = await db
+          .select()
+          .from(documents)
+          .where(eq(documents.userId, ctx.user.id))
+          .limit(5);
 
-      // Call LLM
+        if (userDocs.length > 0) {
+          const docIds = userDocs.map((d: any) => d.id);
+          // Simple retrieval - in production, use vector similarity search
+          const relevantChunks = await db
+            .select()
+            .from(documentChunks)
+            .where(inArray(documentChunks.documentId, docIds))
+            .limit(3);
+
+          if (relevantChunks.length > 0) {
+            ragContext = "\n\nRelevant document excerpts:\n" +
+              relevantChunks
+                .map((chunk: any) => `- ${chunk.chunkText.substring(0, 200)}...`)
+                .join("\n");
+          }
+        }
+      } catch (error) {
+        console.warn("Error retrieving RAG context:", error);
+      }
+
+      // Enhance system prompt with RAG context
+      const enhancedSystemPrompt = systemPrompt + ragContext;
+
+      // Call LLM with enhanced context
       const response = await invokeLLM({
-        messages: llmMessages as any,
+        messages: [
+          { role: "system" as const, content: enhancedSystemPrompt },
+          ...history.map((msg: any) => ({
+            role: msg.role as "user" | "assistant" | "system" | "tool",
+            content: msg.content as string,
+          })),
+        ] as any,
       });
 
       const assistantContent =
