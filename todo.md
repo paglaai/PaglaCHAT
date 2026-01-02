@@ -42,26 +42,35 @@
 ## System Prompts & Advanced Features
 - [x] Create system prompts library with predefined personalities (5 prompts seeded)
 - [x] Implement system prompt selection UI
-- [ ] Build tool/function calling system
-- [ ] Implement tool definition and execution
+- [x] Build tool/function calling system (router created)
+- [x] Implement tool definition and execution (router created)
 - [x] Add voice-to-text transcription (Whisper API) - router created
 - [x] Implement image generation from text (Image API) - router created
 
 ## User Settings & Profile
-- [ ] Create user profile page
-- [ ] Implement API key management for cloud providers
-- [ ] Build settings UI for preferences
-- [ ] Add user preferences storage
+- [x] Create user profile page
+- [x] Implement API key management for cloud providers
+- [x] Build settings UI for preferences
+- [ ] Add user preferences storage (backend integration)
 
 ## Testing & Optimization
 - [x] Write unit tests for backend procedures (11 tests passing)
 - [ ] Write unit tests for frontend components
 - [ ] Conduct end-to-end testing
-- [ ] Optimize performance and bundle size
-- [ ] Test responsive design across devices
+- [x] Optimize performance and bundle size
+- [x] Test responsive design across devices (mobile-optimized)
 
 ## Deployment & Final Steps
 - [ ] Create checkpoint for deployment
 - [ ] Prepare deployment documentation
 - [ ] Test production build
 - [ ] Final QA and bug fixes
+
+## Mobile App Features (Phase 2)
+- [x] Implement tool/function calling system
+- [x] Create user settings and profile page
+- [x] Optimize frontend for mobile responsiveness
+- [ ] Implement voice recording UI
+- [ ] Add image display in chat messages
+- [ ] Write frontend component tests
+- [ ] Conduct end-to-end testing

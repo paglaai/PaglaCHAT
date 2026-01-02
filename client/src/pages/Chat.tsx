@@ -4,8 +4,11 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut } from "lucide-react";
+import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut, Settings as SettingsIcon, Image as ImageIcon } from "lucide-react";
 import { Streamdown } from "streamdown";
+import { useLocation } from "wouter";
+import VoiceInput from "@/components/VoiceInput";
+import ImageDisplay from "@/components/ImageDisplay";
 
 interface Conversation {
   id: number;
@@ -27,6 +30,7 @@ interface Message {
 
 export default function Chat() {
   const { user } = useAuth();
+  const [, navigate] = useLocation();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -46,6 +50,7 @@ export default function Chat() {
   const sendMessageMutation = trpc.chat.sendMessage.useMutation();
   const deleteConvMutation = trpc.chat.deleteConversation.useMutation();
   const archiveConvMutation = trpc.chat.archiveConversation.useMutation();
+  const generateImageMutation = trpc.images.generateImage.useMutation();
 
   useEffect(() => {
     if (conversationsList) {
@@ -138,9 +143,9 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background flex-col md:flex-row">
       {/* Sidebar */}
-      <div className="w-64 border-r border-border bg-card flex flex-col">
+      <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-border bg-card flex flex-col md:flex-col max-h-[40vh] md:max-h-screen overflow-y-auto md:overflow-y-auto">
         <div className="p-6 border-b border-border">
           <h1 className="text-2xl font-bold text-foreground">TogetherChat</h1>
           <p className="text-sm text-muted-foreground mt-1">Multi-Model AI Chat</p>
@@ -150,6 +155,17 @@ export default function Chat() {
               <p className="text-muted-foreground truncate">{user.email}</p>
             </div>
           )}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="p-4 border-b border-border space-y-2">
+          <button
+            onClick={() => navigate("/settings")}
+            className="flex items-center gap-2 p-2 text-sm hover:bg-muted transition-colors w-full"
+          >
+            <SettingsIcon className="w-4 h-4" />
+            <span>Settings</span>
+          </button>
         </div>
 
         {/* New Conversation */}
@@ -235,7 +251,7 @@ export default function Chat() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-h-[60vh] md:min-h-screen">
         {currentConversation ? (
           <>
             {/* Chat Header */}
@@ -285,7 +301,7 @@ export default function Chat() {
 
             {/* Input Area */}
             <div className="border-t border-border p-6 bg-card">
-              <div className="flex gap-4">
+              <div className="flex gap-2 sm:gap-4">
                 <Input
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
@@ -299,10 +315,30 @@ export default function Chat() {
                   disabled={isLoading}
                   className="flex-1"
                 />
+                <VoiceInput
+                  onTranscription={(text) => setMessageInput(messageInput + " " + text)}
+                  disabled={isLoading}
+                />
+                <Button
+                  onClick={() => {
+                    if (currentConversation && messageInput.trim()) {
+                      generateImageMutation.mutate({
+                        prompt: messageInput,
+                        conversationId: currentConversation.id,
+                      });
+                    }
+                  }}
+                  disabled={isLoading || !messageInput.trim() || !currentConversation}
+                  variant="outline"
+                  size="icon"
+                >
+                  <ImageIcon className="w-4 h-4" />
+                </Button>
                 <Button
                   onClick={handleSendMessage}
                   disabled={isLoading || !messageInput.trim()}
                   className="bg-accent text-accent-foreground hover:opacity-90"
+                  size="icon"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
