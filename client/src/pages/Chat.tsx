@@ -147,7 +147,7 @@ export default function Chat() {
       {/* Sidebar */}
       <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-border bg-card flex flex-col md:flex-col max-h-[40vh] md:max-h-screen overflow-y-auto md:overflow-y-auto">
         <div className="p-6 border-b border-border">
-          <h1 className="text-2xl font-bold text-foreground">TogetherChat</h1>
+          <h1 className="text-2xl font-bold text-foreground">DirtyChat</h1>
           <p className="text-sm text-muted-foreground mt-1">Multi-Model AI Chat</p>
           {user && (
             <div className="mt-4 pt-4 border-t border-border text-xs">
@@ -353,7 +353,7 @@ export default function Chat() {
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 bg-accent mx-auto mb-6"></div>
-              <h2 className="text-3xl font-bold text-foreground mb-2">Welcome to TogetherChat</h2>
+              <h2 className="text-3xl font-bold text-foreground mb-2">Welcome to DirtyChat</h2>
               <p className="text-lg text-muted-foreground mb-6">
                 Select a model and create a new conversation to get started
               </p>

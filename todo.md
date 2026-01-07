@@ -1,4 +1,4 @@
-# TogetherChatUI Clone - Project TODO
+# DirtyChat - Project TODO
 
 ## Database Schema & Backend Setup
 - [x] Design and implement database schema (users, conversations, messages, models, documents, tools, system_prompts)
