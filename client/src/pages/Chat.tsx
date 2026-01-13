@@ -4,11 +4,12 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut, Settings as SettingsIcon, Image as ImageIcon } from "lucide-react";
+import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut, Settings as SettingsIcon, Image as ImageIcon, BarChart3 } from "lucide-react";
 import { Streamdown } from "streamdown";
 import { useLocation } from "wouter";
 import VoiceInput from "@/components/VoiceInput";
 import ImageDisplay from "@/components/ImageDisplay";
+import { ExportDialog } from "@/components/ExportDialog";
 
 interface Conversation {
   id: number;
@@ -255,11 +256,28 @@ export default function Chat() {
         {currentConversation ? (
           <>
             {/* Chat Header */}
-            <div className="border-b border-border p-6 bg-card">
-              <h2 className="text-2xl font-bold text-foreground">{currentConversation.title}</h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Model: {modelsList?.find((m: any) => m.id === currentConversation.modelId)?.displayName}
-              </p>
+            <div className="border-b border-border p-6 bg-card flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">{currentConversation.title}</h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Model: {modelsList?.find((m: any) => m.id === currentConversation.modelId)?.displayName}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/analytics")}
+                  className="gap-2"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  Analytics
+                </Button>
+                <ExportDialog
+                  conversationId={currentConversation.id}
+                  conversationTitle={currentConversation.title}
+                />
+              </div>
             </div>
 
             {/* Messages Area */}

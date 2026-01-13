@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
+import Analytics from "./pages/Analytics";
 import { useAuth } from "./_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 
@@ -38,6 +39,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Chat} />
       <Route path={"/settings"} component={Settings} />
+      <Route path={"/analytics"} component={Analytics} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
