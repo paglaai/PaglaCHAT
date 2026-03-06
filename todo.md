@@ -92,6 +92,20 @@
 - [x] Create charts for usage patterns
 - [ ] Implement date range filtering
 
+### PWA & Offline Support
+- [x] Create service worker for offline caching
+- [x] Add PWA manifest for installability
+- [x] Implement PWA registration hook
+- [x] Add install prompt UI
+- [x] Enable offline functionality
+
+### Conversation Sharing
+- [x] Create sharing router for share links
+- [x] Implement share token generation
+- [x] Add share statistics tracking
+- [x] Create share revocation functionality
+- [ ] Add share UI to chat interface
+
 ### Performance Optimization
 - [ ] Implement message pagination
 - [ ] Add lazy loading for images
