@@ -126,3 +126,27 @@
 - [ ] Create read-only conversation view
 - [ ] Implement access control
 - [ ] Add collaboration notifications
+
+
+## Phase 4: Custom Notification System
+
+### Notification Backend
+- [x] Add notifications table to database schema
+- [x] Create notification types enum (info, success, warning, error, custom)
+- [x] Implement notification service layer
+- [x] Create tRPC procedures for notification CRUD
+- [x] Add notification persistence and history
+
+### Notification Frontend
+- [x] Create notification context provider
+- [x] Build notification toast component
+- [x] Implement notification center/panel
+- [ ] Add notification preferences UI
+- [ ] Create notification sound/badge support
+
+### Notification Integration
+- [ ] Integrate notifications for conversation events
+- [ ] Add notifications for document uploads
+- [ ] Implement notifications for model responses
+- [ ] Add notifications for sharing events
+- [ ] Create notifications for system alerts
