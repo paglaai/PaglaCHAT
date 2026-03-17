@@ -150,3 +150,48 @@
 - [ ] Implement notifications for model responses
 - [ ] Add notifications for sharing events
 - [ ] Create notifications for system alerts
+
+
+## Phase 5: Multi-Provider LLM Expansion & Apple Silicon Optimization
+
+### New LLM Provider Integrations
+- [x] Implement Google Gemini API integration (seeded)
+- [x] Implement OpenRouter API integration (seeded)
+- [x] Implement Ollama local model support (seeded)
+- [x] Implement LMStudio integration (seeded)
+- [x] Implement Llama.cpp integration (seeded)
+- [x] Implement LlamaBarn integration (seeded)
+- [x] Implement Qwen model support (seeded)
+- [x] Implement Zhipu.ai integration (seeded)
+- [x] Implement Kimi integration (seeded)
+- [x] Implement ComfyUI integration (seeded)
+
+### Model Format Support
+- [ ] Add .gguf model format detection and loading
+- [ ] Add .mlx model format support for Apple Silicon
+- [ ] Implement local model management UI
+- [ ] Create model download and caching system
+- [ ] Add model compatibility checking
+
+### Apple Silicon Optimization
+- [x] Implement Metal acceleration for GPU inference (service created)
+- [x] Add CoreML model conversion support (service created)
+- [x] Optimize for M2 Pro 16GB unified memory (service created)
+- [x] Implement memory management for large models (service created)
+- [x] Add performance profiling and monitoring (service created)
+- [ ] Create Metal shader optimization
+- [ ] Implement efficient tensor operations
+
+### Provider Configuration UI
+- [ ] Create provider selection interface
+- [ ] Build API key management for new providers
+- [ ] Implement model format detection UI
+- [ ] Add provider-specific settings panel
+- [ ] Create local model path configuration
+
+### Performance & Testing
+- [ ] Benchmark all providers on M2 Pro
+- [ ] Optimize inference latency
+- [ ] Test with various model sizes (7B, 13B, 70B)
+- [ ] Implement performance monitoring
+- [ ] Create load testing suite

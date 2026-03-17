@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `providers` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`name` varchar(64) NOT NULL UNIQUE,\n\t`type` enum('cloud','local','hybrid') NOT NULL,\n\t`baseUrl` varchar(512),\n\t`description` text,\n\t`isEnabled` int NOT NULL DEFAULT 1,\n\t`requiresAuth` int NOT NULL DEFAULT 1,\n\t`supportedFormats` json,\n\t`maxTokens` int DEFAULT 4096,\n\t`temperature` varchar(10) DEFAULT '0.7',\n\t`metadata` json,\n\t`createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n\t`updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n\tPRIMARY KEY (`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user iQEzrVWctHMjVxR.root --database knTiWWPmArz5A3J9z4PAmo --execute CREATE TABLE `providers` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`name` varchar(64) NOT NULL UNIQUE,\n\t`type` enum('cloud','local','hybrid') NOT NULL,\n\t`baseUrl` varchar(512),\n\t`description` text,\n\t`isEnabled` int NOT NULL DEFAULT 1,\n\t`requiresAuth` int NOT NULL DEFAULT 1,\n\t`supportedFormats` json,\n\t`maxTokens` int DEFAULT 4096,\n\t`temperature` varchar(10) DEFAULT '0.7',\n\t`metadata` json,\n\t`createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n\t`updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n\tPRIMARY KEY (`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 132
+}

@@ -6,10 +6,18 @@ if (!connectionString) {
 }
 
 export default defineConfig({
-  schema: ["./drizzle/schema.ts", "./drizzle/notifications.ts"],
+  schema: ["./drizzle/schema.ts", "./drizzle/notifications.ts", "./drizzle/providers.ts"],
   out: "./drizzle",
+  // Migrations for new providers
+  migrations: {
+    table: "__drizzle_migrations__",
+    schema: "public",
+  },
   dialect: "mysql",
   dbCredentials: {
     url: connectionString,
   },
+  // Enable verbose logging for debugging
+  verbose: false,
+  strict: true,
 });

@@ -10,6 +10,7 @@ import { toolsRouter } from "./routers/tools";
 import { exportRouter } from "./routers/export";
 import { sharingRouter } from "./routers/sharing";
 import { notificationsRouter } from "./routers/notifications";
+import { providersRouter } from "./routers/providers";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -32,6 +33,7 @@ export const appRouter = router({
   export: exportRouter,
   sharing: sharingRouter,
   notifications: notificationsRouter,
+  providers: providersRouter,
 });
 
 export type AppRouter = typeof appRouter;

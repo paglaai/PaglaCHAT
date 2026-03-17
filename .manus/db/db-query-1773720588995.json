@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `localModels` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`providerId` int NOT NULL,\n\t`name` varchar(128) NOT NULL,\n\t`modelPath` varchar(512) NOT NULL,\n\t`format` enum('gguf','mlx','safetensors','other') NOT NULL,\n\t`fileSize` int,\n\t`quantization` varchar(64),\n\t`parameters` varchar(64),\n\t`isAppleSiliconOptimized` int DEFAULT 0,\n\t`metalAcceleration` int DEFAULT 0,\n\t`coreMLConversion` int DEFAULT 0,\n\t`memoryRequired` int,\n\t`estimatedLatency` int,\n\t`description` text,\n\t`metadata` json,\n\t`createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n\t`updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n\tPRIMARY KEY (`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user iQEzrVWctHMjVxR.root --database knTiWWPmArz5A3J9z4PAmo --execute CREATE TABLE `localModels` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`providerId` int NOT NULL,\n\t`name` varchar(128) NOT NULL,\n\t`modelPath` varchar(512) NOT NULL,\n\t`format` enum('gguf','mlx','safetensors','other') NOT NULL,\n\t`fileSize` int,\n\t`quantization` varchar(64),\n\t`parameters` varchar(64),\n\t`isAppleSiliconOptimized` int DEFAULT 0,\n\t`metalAcceleration` int DEFAULT 0,\n\t`coreMLConversion` int DEFAULT 0,\n\t`memoryRequired` int,\n\t`estimatedLatency` int,\n\t`description` text,\n\t`metadata` json,\n\t`createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n\t`updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n\tPRIMARY KEY (`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 121
+}
