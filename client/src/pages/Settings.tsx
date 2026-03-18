@@ -19,6 +19,12 @@ export default function Settings() {
     anthropic: "",
     groq: "",
     together: "",
+    gemini: "",
+    openrouter: "",
+    llamabarn: "",
+    qwen: "",
+    zhipu: "",
+    kimi: "",
   });
 
   // Preferences state
@@ -40,6 +46,12 @@ export default function Settings() {
         anthropic: "",
         groq: "",
         together: "",
+        gemini: "",
+        openrouter: "",
+        llamabarn: "",
+        qwen: "",
+        zhipu: "",
+        kimi: "",
       });
     } catch (error: any) {
       toast.error(error.message || "Failed to save API keys");
@@ -256,6 +268,112 @@ export default function Settings() {
                       />
                       <p className="text-xs text-muted-foreground mt-1">
                         Get your key from <a href="https://www.together.ai/account/api-keys" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">together.ai</a>
+                      </p>
+                    </div>
+
+                    <div className="border-t border-border pt-4 mt-4">
+                      <h3 className="text-sm font-semibold text-foreground mb-3">Additional Providers</h3>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Google Gemini API Key
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="AIza..."
+                        value={apiKeys.gemini}
+                        onChange={(e) =>
+                          setApiKeys({ ...apiKeys, gemini: e.target.value })
+                        }
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Get your key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">aistudio.google.com</a>
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        OpenRouter API Key
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="sk-or-..."
+                        value={apiKeys.openrouter}
+                        onChange={(e) =>
+                          setApiKeys({ ...apiKeys, openrouter: e.target.value })
+                        }
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Get your key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">openrouter.ai</a>
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        LlamaBarn API Key
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="..."
+                        value={apiKeys.llamabarn}
+                        onChange={(e) =>
+                          setApiKeys({ ...apiKeys, llamabarn: e.target.value })
+                        }
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Get your key from <a href="https://llamabarn.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">llamabarn.com</a>
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Qwen API Key
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="..."
+                        value={apiKeys.qwen}
+                        onChange={(e) =>
+                          setApiKeys({ ...apiKeys, qwen: e.target.value })
+                        }
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Get your key from <a href="https://dashscope.aliyun.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">dashscope.aliyun.com</a>
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Zhipu API Key
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="..."
+                        value={apiKeys.zhipu}
+                        onChange={(e) =>
+                          setApiKeys({ ...apiKeys, zhipu: e.target.value })
+                        }
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Get your key from <a href="https://open.bigmodel.cn" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">open.bigmodel.cn</a>
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Kimi API Key
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="..."
+                        value={apiKeys.kimi}
+                        onChange={(e) =>
+                          setApiKeys({ ...apiKeys, kimi: e.target.value })
+                        }
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Get your key from <a href="https://platform.moonshot.cn" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">platform.moonshot.cn</a>
                       </p>
                     </div>
                   </div>

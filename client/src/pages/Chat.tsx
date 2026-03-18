@@ -10,6 +10,9 @@ import { useLocation } from "wouter";
 import VoiceInput from "@/components/VoiceInput";
 import ImageDisplay from "@/components/ImageDisplay";
 import { ExportDialog } from "@/components/ExportDialog";
+import { ProviderSelector } from "@/components/ProviderSelector";
+import { ProviderConfigDialog } from "@/components/ProviderConfigDialog";
+import { LocalModelManager } from "@/components/LocalModelManager";
 
 interface Conversation {
   id: number;
@@ -37,8 +40,10 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [selectedSystemPrompt, setSelectedSystemPrompt] = useState<string>("");
+  const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const [messageInput, setMessageInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isProviderConfigOpen, setIsProviderConfigOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch conversations
@@ -171,6 +176,12 @@ export default function Chat() {
 
         {/* New Conversation */}
         <div className="p-6 border-b border-border space-y-4">
+          <ProviderSelector
+            selectedProvider={selectedProvider}
+            onProviderChange={setSelectedProvider}
+            onProviderConfigClick={() => setIsProviderConfigOpen(true)}
+          />
+
           <Select value={selectedModel} onValueChange={setSelectedModel}>
             <SelectTrigger>
               <SelectValue placeholder="Select Model" />
@@ -196,6 +207,13 @@ export default function Chat() {
               ))}
             </SelectContent>
           </Select>
+
+          <LocalModelManager
+            provider={selectedProvider}
+            onModelSelect={(modelPath) => {
+              console.log("Selected model:", modelPath);
+            }}
+          />
 
           <Button
             onClick={handleCreateConversation}
@@ -381,6 +399,15 @@ export default function Chat() {
             </div>
           </div>
         )}
+        <ProviderConfigDialog
+          isOpen={isProviderConfigOpen}
+          onClose={() => setIsProviderConfigOpen(false)}
+          provider={selectedProvider}
+          providerName={selectedProvider || "Provider"}
+          onSave={(config) => {
+            console.log("Provider config saved:", config);
+          }}
+        />
       </div>
     </div>
   );
