@@ -8,6 +8,7 @@ import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
 import { useAuth } from "./_core/hooks/useAuth";
+import { getLoginUrl } from "./const";
 import { Loader2 } from "lucide-react";
 
 function Router() {
@@ -27,7 +28,7 @@ function Router() {
         <div className="text-center">
           <h1 className="text-4xl font-bold text-foreground mb-4">DirtyChat</h1>
           <p className="text-lg text-muted-foreground mb-8">Multi-Model AI Chat Application</p>
-          <a href="/api/oauth/login" className="inline-block bg-accent text-accent-foreground px-8 py-3 font-semibold hover:opacity-90">
+          <a href={getLoginUrl()} className="inline-block bg-accent text-accent-foreground px-8 py-3 font-semibold hover:opacity-90">
             Sign In
           </a>
         </div>

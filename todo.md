@@ -202,3 +202,9 @@
 - [ ] Benchmark all providers on M2 Pro
 - [ ] Optimize inference latency
 - [ ] Test with various model sizes (7B, 13B, 70B)
+
+
+## Phase 6 Bug Fixes
+
+### Authentication Issues
+- [x] Fix OAuth login button to use correct getLoginUrl() instead of /api/oauth/login
