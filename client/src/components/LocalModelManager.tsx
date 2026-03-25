@@ -3,7 +3,13 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Download, Trash2, AlertCircle } from "lucide-react";
@@ -35,13 +41,16 @@ export function LocalModelManager({
   onModelSelect,
 }: LocalModelManagerProps) {
   const [modelPath, setModelPath] = useState("");
-  const [modelFormat, setModelFormat] = useState<"gguf" | "mlx" | "safetensors">("gguf");
+  const [modelFormat, setModelFormat] = useState<
+    "gguf" | "mlx" | "safetensors"
+  >("gguf");
   const [quantization, setQuantization] = useState("Q4_K_M");
   const [isLoading, setIsLoading] = useState(false);
   const [localModels, setLocalModels] = useState<LocalModel[]>([]);
 
   const optimizeQuery = trpc.providers.getAppleSiliconOptimization.useQuery;
-  const recommendQuantizationQuery = trpc.providers.getRecommendedQuantization.useQuery;
+  const recommendQuantizationQuery =
+    trpc.providers.getRecommendedQuantization.useQuery;
 
   const handleAddModel = async () => {
     if (!modelPath.trim()) return;
@@ -59,7 +68,7 @@ export function LocalModelManager({
         optimized: false,
       };
 
-      setLocalModels((prev) => [...prev, newModel]);
+      setLocalModels(prev => [...prev, newModel]);
       setModelPath("");
     } finally {
       setIsLoading(false);
@@ -75,8 +84,8 @@ export function LocalModelManager({
       };
 
       // Update model with optimization results
-      setLocalModels((prev) =>
-        prev.map((m) =>
+      setLocalModels(prev =>
+        prev.map(m =>
           m.id === model.id
             ? {
                 ...m,
@@ -105,12 +114,15 @@ export function LocalModelManager({
   };
 
   const handleRemoveModel = (modelId: string) => {
-    setLocalModels((prev) => prev.filter((m) => m.id !== modelId));
+    setLocalModels(prev => prev.filter(m => m.id !== modelId));
   };
 
-  const isLocalProvider = ["ollama", "lmstudio", "llama-cpp", "comfyui"].includes(
-    provider || ""
-  );
+  const isLocalProvider = [
+    "ollama",
+    "lmstudio",
+    "llama-cpp",
+    "comfyui",
+  ].includes(provider || "");
 
   if (!isLocalProvider) {
     return null;
@@ -128,7 +140,8 @@ export function LocalModelManager({
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Local models are optimized for Apple Silicon (M2 Pro) with Metal acceleration
+            Local models are optimized for Apple Silicon (M2 Pro) with Metal
+            acceleration
           </AlertDescription>
         </Alert>
 
@@ -140,14 +153,17 @@ export function LocalModelManager({
               type="text"
               placeholder="/path/to/model.gguf"
               value={modelPath}
-              onChange={(e) => setModelPath(e.target.value)}
+              onChange={e => setModelPath(e.target.value)}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="format">Format</Label>
-              <Select value={modelFormat} onValueChange={(value: any) => setModelFormat(value)}>
+              <Select
+                value={modelFormat}
+                onValueChange={(value: any) => setModelFormat(value)}
+              >
                 <SelectTrigger id="format">
                   <SelectValue />
                 </SelectTrigger>
@@ -177,7 +193,10 @@ export function LocalModelManager({
             </div>
           </div>
 
-          <Button onClick={handleAddModel} disabled={isLoading || !modelPath.trim()}>
+          <Button
+            onClick={handleAddModel}
+            disabled={isLoading || !modelPath.trim()}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -195,15 +214,19 @@ export function LocalModelManager({
         {localModels.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-sm font-semibold">Loaded Models</h3>
-            {localModels.map((model) => (
+            {localModels.map(model => (
               <div
                 key={model.id}
                 className="p-3 bg-card rounded-lg border border-border space-y-2"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">{model.name}</p>
-                    <p className="text-xs text-muted-foreground break-all">{model.path}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {model.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground break-all">
+                      {model.path}
+                    </p>
                   </div>
                   <Button
                     variant="ghost"
@@ -225,7 +248,10 @@ export function LocalModelManager({
                     </Badge>
                   )}
                   {model.optimized && (
-                    <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
+                    <Badge
+                      variant="secondary"
+                      className="text-xs bg-green-100 text-green-800"
+                    >
                       Optimized
                     </Badge>
                   )}

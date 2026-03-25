@@ -53,13 +53,13 @@ export function ProviderSelector({
         provider: providerId,
         model: "gpt-3.5-turbo", // Default model for health check
       });
-      setHealthStatus((prev) => ({
+      setHealthStatus(prev => ({
         ...prev,
         [providerId]: result.healthy,
       }));
     } catch (error) {
       console.error(`Failed to check health for ${providerId}:`, error);
-      setHealthStatus((prev) => ({
+      setHealthStatus(prev => ({
         ...prev,
         [providerId]: false,
       }));
@@ -79,7 +79,7 @@ export function ProviderSelector({
     }
   };
 
-  const selectedProviderData = providers.find((p) => p.id === selectedProvider);
+  const selectedProviderData = providers.find(p => p.id === selectedProvider);
 
   return (
     <div className="w-full space-y-3">
@@ -109,7 +109,7 @@ export function ProviderSelector({
               Loading providers...
             </div>
           ) : (
-            providers.map((provider) => (
+            providers.map(provider => (
               <SelectItem key={provider.id} value={provider.id}>
                 <div className="flex items-center gap-2">
                   <span>{provider.name}</span>
@@ -140,7 +140,7 @@ export function ProviderSelector({
                 API Key Required
               </Badge>
             )}
-            {selectedProviderData.supportedFormats.map((format) => (
+            {selectedProviderData.supportedFormats.map(format => (
               <Badge key={format} variant="secondary" className="text-xs">
                 {format.toUpperCase()}
               </Badge>
@@ -151,7 +151,9 @@ export function ProviderSelector({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => selectedProvider && checkProviderHealth(selectedProvider)}
+              onClick={() =>
+                selectedProvider && checkProviderHealth(selectedProvider)
+              }
               disabled={isCheckingHealth || !selectedProvider}
               className="text-xs h-7"
             >
@@ -165,21 +167,22 @@ export function ProviderSelector({
               )}
             </Button>
 
-            {selectedProvider && healthStatus[selectedProvider] !== undefined && (
-              <div className="flex items-center gap-1">
-                {healthStatus[selectedProvider] ? (
-                  <>
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                    <span className="text-xs text-green-600">Healthy</span>
-                  </>
-                ) : (
-                  <>
-                    <AlertCircle className="w-4 h-4 text-red-600" />
-                    <span className="text-xs text-red-600">Unavailable</span>
-                  </>
-                )}
-              </div>
-            )}
+            {selectedProvider &&
+              healthStatus[selectedProvider] !== undefined && (
+                <div className="flex items-center gap-1">
+                  {healthStatus[selectedProvider] ? (
+                    <>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span className="text-xs text-green-600">Healthy</span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="w-4 h-4 text-red-600" />
+                      <span className="text-xs text-red-600">Unavailable</span>
+                    </>
+                  )}
+                </div>
+              )}
           </div>
         </div>
       )}

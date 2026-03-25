@@ -1,4 +1,12 @@
-import { int, json, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  int,
+  json,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 /**
  * Extended providers table for new LLM providers
@@ -33,7 +41,12 @@ export const localModels = mysqlTable("localModels", {
   providerId: int("providerId").notNull(), // reference to providers table
   name: varchar("name", { length: 128 }).notNull(), // e.g., "Llama 2 7B"
   modelPath: varchar("modelPath", { length: 512 }).notNull(), // local file path
-  format: mysqlEnum("format", ["gguf", "mlx", "safetensors", "other"]).notNull(),
+  format: mysqlEnum("format", [
+    "gguf",
+    "mlx",
+    "safetensors",
+    "other",
+  ]).notNull(),
   fileSize: int("fileSize"), // in MB
   quantization: varchar("quantization", { length: 64 }), // e.g., "Q4_K_M", "Q5_K_S"
   parameters: varchar("parameters", { length: 64 }), // e.g., "7B", "13B", "70B"
@@ -81,11 +94,16 @@ export const appleSiliconSettings = mysqlTable("appleSiliconSettings", {
   enableMemoryMapping: int("enableMemoryMapping").default(1),
   threadCount: int("threadCount").default(8), // CPU threads for inference
   batchSize: int("batchSize").default(1),
-  preferredFormat: mysqlEnum("preferredFormat", ["gguf", "mlx", "auto"]).default("auto"),
+  preferredFormat: mysqlEnum("preferredFormat", [
+    "gguf",
+    "mlx",
+    "auto",
+  ]).default("auto"),
   metadata: json("metadata").$type<Record<string, unknown>>().default({}),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export type AppleSiliconSetting = typeof appleSiliconSettings.$inferSelect;
-export type InsertAppleSiliconSetting = typeof appleSiliconSettings.$inferInsert;
+export type InsertAppleSiliconSetting =
+  typeof appleSiliconSettings.$inferInsert;

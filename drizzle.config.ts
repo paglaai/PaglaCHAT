@@ -6,7 +6,11 @@ if (!connectionString) {
 }
 
 export default defineConfig({
-  schema: ["./drizzle/schema.ts", "./drizzle/notifications.ts", "./drizzle/providers.ts"],
+  schema: [
+    "./drizzle/schema.ts",
+    "./drizzle/notifications.ts",
+    "./drizzle/providers.ts",
+  ],
   out: "./drizzle",
   // Migrations for new providers
   migrations: {

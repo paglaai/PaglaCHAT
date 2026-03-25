@@ -29,8 +29,10 @@ export function useStreamingChat({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const sendMessageMutation = trpc.streamingChat.sendMessageStreaming.useMutation();
-  const checkProviderMutation = trpc.streamingChat.checkProviderAvailability.useMutation();
+  const sendMessageMutation =
+    trpc.streamingChat.sendMessageStreaming.useMutation();
+  const checkProviderMutation =
+    trpc.streamingChat.checkProviderAvailability.useMutation();
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -63,7 +65,7 @@ export function useStreamingChat({
         });
 
         // Add user message
-        setMessages((prev) => [
+        setMessages(prev => [
           ...prev,
           {
             id: `user-${Date.now()}`,
@@ -74,7 +76,7 @@ export function useStreamingChat({
 
         // Add assistant message with streaming simulation
         const assistantId = `assistant-${Date.now()}`;
-        setMessages((prev) => [
+        setMessages(prev => [
           ...prev,
           {
             id: assistantId,
@@ -94,36 +96,41 @@ export function useStreamingChat({
 
         for (let i = 0; i < fullContent.length; i += chunkSize) {
           currentContent += fullContent.substring(i, i + chunkSize);
-          
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === assistantId
-                ? { ...msg, content: currentContent }
-                : msg
+
+          setMessages(prev =>
+            prev.map(msg =>
+              msg.id === assistantId ? { ...msg, content: currentContent } : msg
             )
           );
 
           // Add a small delay to simulate streaming
-          await new Promise((resolve) => setTimeout(resolve, 50));
+          await new Promise(resolve => setTimeout(resolve, 50));
         }
 
         // Mark streaming as complete
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === assistantId
-              ? { ...msg, isStreaming: false }
-              : msg
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === assistantId ? { ...msg, isStreaming: false } : msg
           )
         );
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Failed to send message";
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to send message";
         setError(errorMessage);
         console.error("Streaming chat error:", err);
       } finally {
         setIsLoading(false);
       }
     },
-    [conversationId, provider, model, apiKey, baseUrl, sendMessageMutation, checkProviderMutation]
+    [
+      conversationId,
+      provider,
+      model,
+      apiKey,
+      baseUrl,
+      sendMessageMutation,
+      checkProviderMutation,
+    ]
   );
 
   const clearMessages = useCallback(() => {
