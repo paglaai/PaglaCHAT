@@ -54,9 +54,17 @@ export class AppleSiliconOptimizer {
   /**
    * Optimize model for Apple Silicon
    */
-  static async optimizeModel(config: ModelOptimizationConfig): Promise<OptimizationResult> {
-    const modelSize = await this.estimateModelSize(config.modelPath, config.format);
-    const memoryRequired = this.calculateMemoryRequirement(modelSize, config.quantization);
+  static async optimizeModel(
+    config: ModelOptimizationConfig
+  ): Promise<OptimizationResult> {
+    const modelSize = await this.estimateModelSize(
+      config.modelPath,
+      config.format
+    );
+    const memoryRequired = this.calculateMemoryRequirement(
+      modelSize,
+      config.quantization
+    );
 
     // Validate memory constraints
     if (memoryRequired > config.maxMemoryUsage * 1024) {
@@ -69,7 +77,10 @@ export class AppleSiliconOptimizer {
     const threadCount = this.getOptimalThreadCount(modelSize);
 
     // Determine optimal batch size
-    const batchSize = this.getOptimalBatchSize(memoryRequired, config.maxMemoryUsage);
+    const batchSize = this.getOptimalBatchSize(
+      memoryRequired,
+      config.maxMemoryUsage
+    );
 
     // Estimate latency
     const estimatedLatency = this.estimateLatency(
@@ -95,7 +106,10 @@ export class AppleSiliconOptimizer {
   /**
    * Estimate model size in GB
    */
-  private static async estimateModelSize(modelPath: string, format: string): Promise<number> {
+  private static async estimateModelSize(
+    modelPath: string,
+    format: string
+  ): Promise<number> {
     // In a real implementation, this would read the actual file
     // For now, return estimates based on common model sizes
     const modelSizeMap: Record<string, Record<string, number>> = {
@@ -126,7 +140,10 @@ export class AppleSiliconOptimizer {
   /**
    * Calculate memory requirement based on quantization
    */
-  private static calculateMemoryRequirement(modelSizeGB: number, quantization: string): number {
+  private static calculateMemoryRequirement(
+    modelSizeGB: number,
+    quantization: string
+  ): number {
     const quantizationFactors: Record<string, number> = {
       Q4_K_M: 0.5, // 4-bit quantization
       Q5_K_S: 0.6, // 5-bit quantization
@@ -157,7 +174,10 @@ export class AppleSiliconOptimizer {
   /**
    * Get optimal batch size based on memory constraints
    */
-  private static getOptimalBatchSize(memoryRequired: number, maxMemoryGB: number): number {
+  private static getOptimalBatchSize(
+    memoryRequired: number,
+    maxMemoryGB: number
+  ): number {
     const maxMemoryMB = maxMemoryGB * 1024;
     const availableMemory = maxMemoryMB - memoryRequired;
 
@@ -194,7 +214,8 @@ export class AppleSiliconOptimizer {
 
     // Metal acceleration speedup (2-4x depending on model size)
     if (useMetalAcceleration) {
-      const metalSpeedup = modelSizeGB <= 7 ? 3.5 : modelSizeGB <= 13 ? 2.8 : 2.0;
+      const metalSpeedup =
+        modelSizeGB <= 7 ? 3.5 : modelSizeGB <= 13 ? 2.8 : 2.0;
       latency = latency / metalSpeedup;
     }
 
@@ -204,7 +225,10 @@ export class AppleSiliconOptimizer {
   /**
    * Recommend quantization level based on memory and performance
    */
-  static recommendQuantization(modelSizeGB: number, maxMemoryGB: number): string {
+  static recommendQuantization(
+    modelSizeGB: number,
+    maxMemoryGB: number
+  ): string {
     const availableMemory = maxMemoryGB - modelSizeGB;
 
     if (availableMemory < 2) {
@@ -227,7 +251,13 @@ export class AppleSiliconOptimizer {
       return false;
     }
 
-    const metalCompatibleQuantizations = ["Q4_K_M", "Q5_K_S", "Q6_K", "Q8_0", "F16"];
+    const metalCompatibleQuantizations = [
+      "Q4_K_M",
+      "Q5_K_S",
+      "Q6_K",
+      "Q8_0",
+      "F16",
+    ];
     return metalCompatibleQuantizations.includes(quantization);
   }
 

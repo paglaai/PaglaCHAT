@@ -1,5 +1,13 @@
 import React from "react";
-import { X, Pin, Check, AlertCircle, Info, CheckCircle, AlertTriangle } from "lucide-react";
+import {
+  X,
+  Pin,
+  Check,
+  AlertCircle,
+  Info,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
 import { Notification } from "@/contexts/NotificationContext";
 import { Button } from "@/components/ui/button";
 
@@ -53,8 +61,12 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
       <div className="flex-shrink-0 mt-0.5">{getIcon()}</div>
 
       <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-sm text-foreground">{notification.title}</h3>
-        <p className="text-sm text-muted-foreground mt-1">{notification.message}</p>
+        <h3 className="font-semibold text-sm text-foreground">
+          {notification.title}
+        </h3>
+        <p className="text-sm text-muted-foreground mt-1">
+          {notification.message}
+        </p>
 
         {notification.action && notification.actionLabel && (
           <Button

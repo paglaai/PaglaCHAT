@@ -1,0 +1,45 @@
+<<<<<<< SEARCH
+  /**
+   * OpenAI API (GPT-4, GPT-3.5-Turbo)
+   */
+  private static async invokeOpenAI(
+=======
+  /**
+   * Shared logic for OpenAI-compatible APIs
+   */
+  private static async invokeOpenAICompatible(
+    messages: LLMMessage[],
+    config: ProviderConfig,
+    url: string
+  ): Promise<string> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (config.apiKey) {
+      headers["Authorization"] = `Bearer ${config.apiKey}`;
+    }
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        model: config.model,
+        messages: messages.map((m) => ({
+          role: m.role,
+          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
+        })),
+        temperature: config.temperature || 0.7,
+        max_tokens: config.maxTokens || 2048,
+      }),
+    });
+
+    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
+    return data.choices[0]?.message.content || "";
+  }
+
+  /**
+   * OpenAI API (GPT-4, GPT-3.5-Turbo)
+   */
+  private static async invokeOpenAI(
+>>>>>>> REPLACE

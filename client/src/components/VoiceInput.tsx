@@ -8,7 +8,10 @@ interface VoiceInputProps {
   disabled?: boolean;
 }
 
-export default function VoiceInput({ onTranscription, disabled }: VoiceInputProps) {
+export default function VoiceInput({
+  onTranscription,
+  disabled,
+}: VoiceInputProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -22,14 +25,14 @@ export default function VoiceInput({ onTranscription, disabled }: VoiceInputProp
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (event) => {
+      mediaRecorder.ondataavailable = event => {
         chunksRef.current.push(event.data);
       };
 
       mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         await handleTranscription(blob);
-        stream.getTracks().forEach((track) => track.stop());
+        stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorder.start();

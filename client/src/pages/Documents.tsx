@@ -29,7 +29,8 @@ export default function Documents() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Queries
-  const { data: documentsList, refetch } = trpc.documents.listDocuments.useQuery();
+  const { data: documentsList, refetch } =
+    trpc.documents.listDocuments.useQuery();
 
   // Mutations
   const uploadMutation = trpc.documents.uploadDocument.useMutation();
@@ -85,7 +86,7 @@ export default function Documents() {
   const handleDelete = async (docId: number) => {
     try {
       await deleteMutation.mutateAsync({ documentId: docId });
-      setDocuments((prev) => prev.filter((d) => d.id !== docId));
+      setDocuments(prev => prev.filter(d => d.id !== docId));
       toast.success("Document deleted");
     } catch (error: any) {
       toast.error(error.message || "Failed to delete document");
@@ -108,7 +109,9 @@ export default function Documents() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Upload Section */}
         <div className="mb-12 border border-border bg-card p-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Upload Document</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Upload Document
+          </h2>
 
           <div className="space-y-4">
             <div className="flex gap-4">
@@ -154,19 +157,23 @@ export default function Documents() {
 
         {/* Documents List */}
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-6">Your Documents</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Your Documents
+          </h2>
 
           {documents.length === 0 ? (
             <div className="border border-border bg-card p-12 text-center">
               <FileText className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg font-semibold text-foreground mb-2">No documents yet</p>
+              <p className="text-lg font-semibold text-foreground mb-2">
+                No documents yet
+              </p>
               <p className="text-muted-foreground">
                 Upload your first document to get started with RAG
               </p>
             </div>
           ) : (
             <div className="space-y-4">
-              {documents.map((doc) => (
+              {documents.map(doc => (
                 <div
                   key={doc.id}
                   className="border border-border bg-card p-6 hover:bg-muted transition-colors"
@@ -179,16 +186,24 @@ export default function Documents() {
                       <div className="space-y-1 text-sm text-muted-foreground">
                         <p>File: {doc.fileName}</p>
                         <p>
-                          Size: {doc.fileSize ? (doc.fileSize / 1024).toFixed(2) : "0"} KB
+                          Size:{" "}
+                          {doc.fileSize
+                            ? (doc.fileSize / 1024).toFixed(2)
+                            : "0"}{" "}
+                          KB
                         </p>
                         <p>
-                          Uploaded: {new Date(doc.createdAt).toLocaleDateString()}
+                          Uploaded:{" "}
+                          {new Date(doc.createdAt).toLocaleDateString()}
                         </p>
                         <p>
-                          Status: {doc.isProcessed ? (
+                          Status:{" "}
+                          {doc.isProcessed ? (
                             <span className="text-green-600">✓ Processed</span>
                           ) : (
-                            <span className="text-yellow-600">⏳ Processing</span>
+                            <span className="text-yellow-600">
+                              ⏳ Processing
+                            </span>
                           )}
                         </p>
                       </div>

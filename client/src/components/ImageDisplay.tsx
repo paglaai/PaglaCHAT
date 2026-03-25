@@ -54,9 +54,7 @@ export default function ImageDisplay({
       </div>
 
       {prompt && (
-        <p className="text-sm text-muted-foreground italic">
-          Prompt: {prompt}
-        </p>
+        <p className="text-sm text-muted-foreground italic">Prompt: {prompt}</p>
       )}
 
       <div className="flex gap-2">
@@ -101,7 +99,7 @@ export default function ImageDisplay({
           <input
             type="text"
             value={editPrompt}
-            onChange={(e) => setEditPrompt(e.target.value)}
+            onChange={e => setEditPrompt(e.target.value)}
             placeholder="Describe the changes you want to make..."
             className="w-full px-3 py-2 border border-border rounded bg-background text-foreground text-sm"
           />
