@@ -1,9 +1,19 @@
 import { protectedProcedure, router } from "../_core/trpc";
 import { z } from "zod";
 import { getDb } from "../db";
-import { conversations, messages, models, systemPrompts, documents, documentChunks } from "../../drizzle/schema";
+import {
+  conversations,
+  messages,
+  models,
+  systemPrompts,
+  documents,
+  documentChunks,
+} from "../../drizzle/schema";
 import { eq, desc, inArray } from "drizzle-orm";
-import { MultiProviderLLMService, type ProviderType } from "../services/multiProviderLLM";
+import {
+  MultiProviderLLMService,
+  type ProviderType,
+} from "../services/multiProviderLLM";
 
 export const streamingChatRouter = router({
   /**
@@ -87,9 +97,12 @@ export const streamingChatRouter = router({
             .limit(3);
 
           if (relevantChunks.length > 0) {
-            ragContext = "\n\nRelevant document excerpts:\n" +
+            ragContext =
+              "\n\nRelevant document excerpts:\n" +
               relevantChunks
-                .map((chunk: any) => `- ${chunk.chunkText.substring(0, 200)}...`)
+                .map(
+                  (chunk: any) => `- ${chunk.chunkText.substring(0, 200)}...`
+                )
                 .join("\n");
           }
         }
@@ -102,7 +115,8 @@ export const streamingChatRouter = router({
 
       // Determine provider and model
       const selectedProvider = (input.provider || "openai") as ProviderType;
-      const selectedModel = input.model || (model[0] as any)?.modelName || "gpt-3.5-turbo";
+      const selectedModel =
+        input.model || (model[0] as any)?.modelName || "gpt-3.5-turbo";
 
       // Call LLM with streaming support
       try {
@@ -124,7 +138,8 @@ export const streamingChatRouter = router({
           }
         );
 
-        const contentStr = typeof response === 'string' ? response : JSON.stringify(response);
+        const contentStr =
+          typeof response === "string" ? response : JSON.stringify(response);
 
         // Add assistant message
         await db.insert(messages).values({
@@ -190,8 +205,10 @@ export const streamingChatRouter = router({
   getProviderModels: protectedProcedure
     .input(z.object({ provider: z.string() }))
     .query(async ({ input }) => {
-      const providerInfo = MultiProviderLLMService.getProviderInfo(input.provider as ProviderType);
-      
+      const providerInfo = MultiProviderLLMService.getProviderInfo(
+        input.provider as ProviderType
+      );
+
       // Return provider info with available models
       // In production, this would fetch from provider API
       return {

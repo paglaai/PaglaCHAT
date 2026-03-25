@@ -6,11 +6,18 @@ import { NotificationToast } from "./NotificationToast";
 
 export const NotificationCenter: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { notifications, unreadCount, removeNotification, markAsRead, markAllAsRead, togglePin, clearAll } =
-    useNotifications();
+  const {
+    notifications,
+    unreadCount,
+    removeNotification,
+    markAsRead,
+    markAllAsRead,
+    togglePin,
+    clearAll,
+  } = useNotifications();
 
-  const pinnedNotifications = notifications.filter((n) => n.isPinned);
-  const unpinnedNotifications = notifications.filter((n) => !n.isPinned);
+  const pinnedNotifications = notifications.filter(n => n.isPinned);
+  const unpinnedNotifications = notifications.filter(n => !n.isPinned);
 
   return (
     <div className="relative">
@@ -80,7 +87,7 @@ export const NotificationCenter: React.FC = () => {
                     <div className="px-4 py-2 bg-gray-50 text-xs font-semibold text-muted-foreground">
                       Pinned
                     </div>
-                    {pinnedNotifications.map((notif) => (
+                    {pinnedNotifications.map(notif => (
                       <div
                         key={notif.id}
                         className={`p-3 border-l-4 border-yellow-400 ${
@@ -106,7 +113,7 @@ export const NotificationCenter: React.FC = () => {
                         Recent
                       </div>
                     )}
-                    {unpinnedNotifications.map((notif) => (
+                    {unpinnedNotifications.map(notif => (
                       <div
                         key={notif.id}
                         className={`p-3 ${notif.isRead ? "bg-gray-50" : "bg-blue-50"}`}
