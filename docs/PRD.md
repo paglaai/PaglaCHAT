@@ -11,12 +11,14 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 ## Core Features
 
 ### 1. Multi-Model LLM Support
+
 - **Supported Providers**: OpenAI, Anthropic, Groq, Together AI, and local models via GGUF
 - **Model Selection**: Users can switch between models mid-conversation
 - **Streaming Responses**: Real-time response streaming with markdown rendering
 - **Context Management**: Automatic conversation history management with token optimization
 
 ### 2. Conversation Management
+
 - **Create/Edit/Delete**: Full CRUD operations on conversations
 - **Archive Feature**: Archive conversations without deletion
 - **Conversation History**: Persistent storage with full message history
@@ -24,6 +26,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - **Export**: Export conversations as markdown or JSON
 
 ### 3. Retrieval-Augmented Generation (RAG)
+
 - **Document Upload**: Support for PDF, TXT, DOCX, and other text formats
 - **Automatic Chunking**: Intelligent text chunking with overlap for context preservation
 - **Semantic Search**: Similarity-based document retrieval
@@ -31,6 +34,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - **Document Management**: Organize, delete, and manage uploaded documents
 
 ### 4. Advanced Features
+
 - **System Prompts Library**: Pre-built personas (General Assistant, Developer, Research, Data Analyst, Creative Writer)
 - **Voice Input**: Hands-free chat using Whisper API transcription
 - **Image Generation**: Create images from text prompts within conversations
@@ -38,6 +42,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - **Tool Calling**: LLM-triggered external integrations (web search, weather, calculator, code execution)
 
 ### 5. User Management
+
 - **Authentication**: OAuth 2.0 integration with Manus platform
 - **Profile Management**: User profile with email and account information
 - **API Key Management**: Secure storage of provider API keys
@@ -45,6 +50,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - **Role-Based Access**: Admin and user roles for future expansion
 
 ### 6. Mobile Optimization
+
 - **Responsive Design**: Fully responsive interface for mobile, tablet, and desktop
 - **Touch-Friendly Controls**: Optimized buttons and inputs for touch interaction
 - **Mobile Navigation**: Collapsible sidebar for smaller screens
@@ -53,6 +59,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 ## Technical Architecture
 
 ### Frontend Stack
+
 - **Framework**: React 19 with TypeScript
 - **Styling**: Tailwind CSS 4 with custom design tokens
 - **State Management**: TanStack React Query with tRPC
@@ -61,6 +68,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - **Icons**: Lucide React
 
 ### Backend Stack
+
 - **Runtime**: Node.js with Express 4
 - **API Framework**: tRPC 11 for type-safe RPC
 - **Database**: MySQL/TiDB with Drizzle ORM
@@ -69,6 +77,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - **Authentication**: Manus OAuth with JWT sessions
 
 ### Database Schema
+
 - **users**: User accounts and authentication
 - **conversations**: Chat conversation metadata
 - **messages**: Individual messages with role and content
@@ -81,24 +90,28 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 ## User Personas
 
 ### 1. Developer
+
 - Uses DirtyChat for code generation, debugging, and technical documentation
 - Prefers Developer system prompt
 - Frequently uses code execution tool
 - Values context from uploaded documentation
 
 ### 2. Researcher
+
 - Leverages RAG for literature review and data analysis
 - Uses Research system prompt
 - Uploads academic papers and datasets
 - Needs conversation export and citation tracking
 
 ### 3. Content Creator
+
 - Uses Creative Writer system prompt
 - Generates and edits images
 - Needs voice input for hands-free brainstorming
 - Values conversation organization and export
 
 ### 4. Business Analyst
+
 - Uses Data Analyst system prompt
 - Analyzes documents and datasets
 - Needs tool integration for data retrieval
@@ -107,18 +120,21 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 ## Success Metrics
 
 ### Engagement
+
 - Daily Active Users (DAU)
 - Average session duration
 - Conversations per user per week
 - Feature adoption rates (voice, image generation, RAG)
 
 ### Performance
+
 - Page load time < 2 seconds
 - Time to first response < 1 second
 - API response time < 500ms (p95)
 - Mobile Lighthouse score > 90
 
 ### Quality
+
 - User satisfaction score > 4.5/5
 - Error rate < 0.1%
 - Model response accuracy > 95%
@@ -127,6 +143,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 ## Roadmap
 
 ### Phase 1 (Current)
+
 - ✅ Multi-model support
 - ✅ Conversation management
 - ✅ RAG functionality
@@ -134,6 +151,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - ✅ Tool calling system
 
 ### Phase 2 (Q2 2026)
+
 - Real-time collaboration (WebSocket support)
 - Advanced RAG with vector embeddings
 - Model fine-tuning interface
@@ -141,6 +159,7 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 - Conversation sharing and permissions
 
 ### Phase 3 (Q3 2026)
+
 - Mobile native apps (iOS/Android)
 - Advanced analytics and insights
 - Custom tool builder
@@ -150,12 +169,14 @@ To democratize access to cutting-edge AI models by providing a unified platform 
 ## Constraints & Assumptions
 
 ### Constraints
+
 - API rate limits from LLM providers
 - Token context window limitations per model
 - File size limits for document uploads (100MB)
 - Storage quotas per user
 
 ### Assumptions
+
 - Users have valid API keys for cloud providers
 - Users have stable internet connection
 - Browsers support modern Web APIs (Web Audio, File API)

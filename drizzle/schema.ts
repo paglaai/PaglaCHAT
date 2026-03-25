@@ -1,4 +1,15 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, boolean, longtext, decimal } from "drizzle-orm/mysql-core";
+import {
+  int,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+  json,
+  boolean,
+  longtext,
+  decimal,
+} from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
 
 /**
@@ -41,8 +52,14 @@ export const models = mysqlTable("models", {
   supportsStreaming: boolean("supportsStreaming").default(true),
   supportsVision: boolean("supportsVision").default(false),
   supportsTools: boolean("supportsTools").default(false),
-  costPer1kInputTokens: decimal("costPer1kInputTokens", { precision: 10, scale: 6 }),
-  costPer1kOutputTokens: decimal("costPer1kOutputTokens", { precision: 10, scale: 6 }),
+  costPer1kInputTokens: decimal("costPer1kInputTokens", {
+    precision: 10,
+    scale: 6,
+  }),
+  costPer1kOutputTokens: decimal("costPer1kOutputTokens", {
+    precision: 10,
+    scale: 6,
+  }),
   isActive: boolean("isActive").default(true),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -155,15 +172,30 @@ export const usersRelations = relations(users, ({ many }) => ({
   documents: many(documents),
 }));
 
-export const conversationsRelations = relations(conversations, ({ one, many }) => ({
-  user: one(users, { fields: [conversations.userId], references: [users.id] }),
-  model: one(models, { fields: [conversations.modelId], references: [models.id] }),
-  systemPrompt: one(systemPrompts, { fields: [conversations.systemPromptId], references: [systemPrompts.id] }),
-  messages: many(messages),
-}));
+export const conversationsRelations = relations(
+  conversations,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [conversations.userId],
+      references: [users.id],
+    }),
+    model: one(models, {
+      fields: [conversations.modelId],
+      references: [models.id],
+    }),
+    systemPrompt: one(systemPrompts, {
+      fields: [conversations.systemPromptId],
+      references: [systemPrompts.id],
+    }),
+    messages: many(messages),
+  })
+);
 
 export const messagesRelations = relations(messages, ({ one }) => ({
-  conversation: one(conversations, { fields: [messages.conversationId], references: [conversations.id] }),
+  conversation: one(conversations, {
+    fields: [messages.conversationId],
+    references: [conversations.id],
+  }),
 }));
 
 export const documentsRelations = relations(documents, ({ one, many }) => ({
@@ -172,5 +204,8 @@ export const documentsRelations = relations(documents, ({ one, many }) => ({
 }));
 
 export const documentChunksRelations = relations(documentChunks, ({ one }) => ({
-  document: one(documents, { fields: [documentChunks.documentId], references: [documents.id] }),
+  document: one(documents, {
+    fields: [documentChunks.documentId],
+    references: [documents.id],
+  }),
 }));
