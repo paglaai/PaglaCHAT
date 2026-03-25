@@ -75,18 +75,25 @@ export class MultiProviderLLMService {
   }
 
   /**
-   * OpenAI API (GPT-4, GPT-3.5-Turbo)
+   * Generic OpenAI-compatible API invoker
    */
-  private static async invokeOpenAI(
+  private static async invokeOpenAICompatible(
+    url: string,
     messages: LLMMessage[],
-    config: ProviderConfig
+    config: ProviderConfig,
+    useAuth = true
   ): Promise<string> {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (useAuth && config.apiKey) {
+      headers["Authorization"] = `Bearer ${config.apiKey}`;
+    }
+
+    const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
+      headers,
       body: JSON.stringify({
         model: config.model,
         messages: messages.map((m) => ({
@@ -100,6 +107,15 @@ export class MultiProviderLLMService {
 
     const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
     return data.choices[0]?.message.content || "";
+  }
+  /**
+   * OpenAI API (GPT-4, GPT-3.5-Turbo)
+   */
+  private static async invokeOpenAI(
+    messages: LLMMessage[],
+    config: ProviderConfig
+  ): Promise<string> {
+    return this.invokeOpenAICompatible("https://api.openai.com/v1/chat/completions", messages, config);
   }
 
   /**
@@ -140,25 +156,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
-        })),
-        temperature: config.temperature || 0.7,
-        max_tokens: config.maxTokens || 2048,
-      }),
-    });
-
-    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
-    return data.choices[0]?.message.content || "";
+    return this.invokeOpenAICompatible("https://api.groq.com/openai/v1/chat/completions", messages, config);
   }
 
   /**
@@ -208,25 +206,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
-        })),
-        temperature: config.temperature || 0.7,
-        max_tokens: config.maxTokens || 2048,
-      }),
-    });
-
-    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
-    return data.choices[0]?.message.content || "";
+    return this.invokeOpenAICompatible("https://openrouter.ai/api/v1/chat/completions", messages, config);
   }
 
   /**
@@ -267,25 +247,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const baseUrl = config.baseUrl || "http://localhost:1234";
-    const response = await fetch(`${baseUrl}/v1/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
-        })),
-        temperature: config.temperature || 0.7,
-        max_tokens: config.maxTokens || 2048,
-      }),
-    });
-
-    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
-    return data.choices[0]?.message.content || "";
+    return this.invokeOpenAICompatible(`${config.baseUrl || "http://localhost:1234"}/v1/chat/completions`, messages, config, false);
   }
 
   /**
@@ -295,25 +257,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const baseUrl = config.baseUrl || "http://localhost:8000";
-    const response = await fetch(`${baseUrl}/v1/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
-        })),
-        temperature: config.temperature || 0.7,
-        max_tokens: config.maxTokens || 2048,
-      }),
-    });
-
-    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
-    return data.choices[0]?.message.content || "";
+    return this.invokeOpenAICompatible(`${config.baseUrl || "http://localhost:8000"}/v1/chat/completions`, messages, config, false);
   }
 
   /**
@@ -323,25 +267,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const response = await fetch("https://api.llamabarn.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
-        })),
-        temperature: config.temperature || 0.7,
-        max_tokens: config.maxTokens || 2048,
-      }),
-    });
-
-    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
-    return data.choices[0]?.message.content || "";
+    return this.invokeOpenAICompatible("https://api.llamabarn.com/v1/chat/completions", messages, config);
   }
 
   /**
@@ -383,25 +309,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const response = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
-        })),
-        temperature: config.temperature || 0.7,
-        max_tokens: config.maxTokens || 2048,
-      }),
-    });
-
-    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
-    return data.choices[0]?.message.content || "";
+    return this.invokeOpenAICompatible("https://open.bigmodel.cn/api/paas/v4/chat/completions", messages, config);
   }
 
   /**
@@ -411,25 +319,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const response = await fetch("https://api.moonshot.cn/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
-        })),
-        temperature: config.temperature || 0.7,
-        max_tokens: config.maxTokens || 2048,
-      }),
-    });
-
-    const data = (await response.json()) as { choices: Array<{ message: { content: string } }> };
-    return data.choices[0]?.message.content || "";
+    return this.invokeOpenAICompatible("https://api.moonshot.cn/v1/chat/completions", messages, config);
   }
 
   /**
@@ -463,22 +353,7 @@ export class MultiProviderLLMService {
     messages: LLMMessage[],
     config: ProviderConfig
   ): Promise<string> {
-    const response = await fetch("https://api.together.xyz/inference", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        prompt: messages.map((m) => `${m.role}: ${m.content}`).join("\n"),
-        max_tokens: config.maxTokens || 2048,
-        temperature: config.temperature || 0.7,
-      }),
-    });
-
-    const data = (await response.json()) as { output: { choices: Array<{ text: string }> } };
-    return data.output.choices[0]?.text || "";
+    return this.invokeOpenAICompatible("https://api.together.xyz/v1/chat/completions", messages, config);
   }
 
   /**
