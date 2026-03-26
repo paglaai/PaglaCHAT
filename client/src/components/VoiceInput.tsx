@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Mic, Square, Loader2 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
@@ -73,24 +74,37 @@ export default function VoiceInput({ onTranscription, disabled }: VoiceInputProp
     }
   };
 
+  const tooltipText = isTranscribing
+    ? "Transcribing..."
+    : isRecording
+      ? "Stop recording"
+      : "Start voice recording";
+
   return (
-    <button
-      onClick={isRecording ? stopRecording : startRecording}
-      disabled={disabled || isTranscribing}
-      className={`p-2 rounded transition-colors ${
-        isRecording
-          ? "bg-destructive text-destructive-foreground hover:opacity-90"
-          : "border border-border hover:bg-muted"
-      }`}
-      title={isRecording ? "Stop recording" : "Start voice recording"}
-    >
-      {isTranscribing ? (
-        <Loader2 className="w-5 h-5 animate-spin" />
-      ) : isRecording ? (
-        <Square className="w-5 h-5" />
-      ) : (
-        <Mic className="w-5 h-5" />
-      )}
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="flex">
+          <button
+            onClick={isRecording ? stopRecording : startRecording}
+            disabled={disabled || isTranscribing}
+            className={`p-2 rounded transition-colors ${
+              isRecording
+                ? "bg-destructive text-destructive-foreground hover:opacity-90"
+                : "border border-border hover:bg-muted"
+            }`}
+            aria-label={tooltipText}
+          >
+            {isTranscribing ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : isRecording ? (
+              <Square className="w-5 h-5" />
+            ) : (
+              <Mic className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>{tooltipText}</TooltipContent>
+    </Tooltip>
   );
 }

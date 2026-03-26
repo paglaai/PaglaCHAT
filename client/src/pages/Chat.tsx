@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut, Settings as SettingsIcon, Image as ImageIcon, BarChart3 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Streamdown } from "streamdown";
 import { useLocation } from "wouter";
 import VoiceInput from "@/components/VoiceInput";
@@ -245,24 +246,36 @@ export default function Chat() {
                   {new Date(conv.updatedAt).toLocaleDateString()}
                 </p>
                 <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchiveConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    <Archive className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-destructive"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArchiveConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-foreground"
+                        aria-label="Archive conversation"
+                      >
+                        <Archive className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Archive conversation</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-destructive"
+                        aria-label="Delete conversation"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete conversation</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             ))}
@@ -348,6 +361,7 @@ export default function Chat() {
                     }
                   }}
                   placeholder="Type your message..."
+                  aria-label="Message input"
                   disabled={isLoading}
                   className="flex-1"
                 />
@@ -355,33 +369,51 @@ export default function Chat() {
                   onTranscription={(text) => setMessageInput(messageInput + " " + text)}
                   disabled={isLoading}
                 />
-                <Button
-                  onClick={() => {
-                    if (currentConversation && messageInput.trim()) {
-                      generateImageMutation.mutate({
-                        prompt: messageInput,
-                        conversationId: currentConversation.id,
-                      });
-                    }
-                  }}
-                  disabled={isLoading || !messageInput.trim() || !currentConversation}
-                  variant="outline"
-                  size="icon"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !messageInput.trim()}
-                  className="bg-accent text-accent-foreground hover:opacity-90"
-                  size="icon"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex">
+                      <Button
+                        onClick={() => {
+                          if (currentConversation && messageInput.trim()) {
+                            generateImageMutation.mutate({
+                              prompt: messageInput,
+                              conversationId: currentConversation.id,
+                            });
+                          }
+                        }}
+                        disabled={isLoading || !messageInput.trim() || !currentConversation}
+                        variant="outline"
+                        size="icon"
+                        aria-label="Generate image"
+                      >
+                        <ImageIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>Generate image</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex">
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={isLoading || !messageInput.trim()}
+                        className="bg-accent text-accent-foreground hover:opacity-90"
+                        size="icon"
+                        aria-label={isLoading ? "Sending message..." : "Send message"}
+                      >
+                        {isLoading ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Send className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {isLoading ? "Sending..." : "Send message"}
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </>
