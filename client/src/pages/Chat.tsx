@@ -10,6 +10,7 @@ import { useLocation } from "wouter";
 import VoiceInput from "@/components/VoiceInput";
 import ImageDisplay from "@/components/ImageDisplay";
 import { ExportDialog } from "@/components/ExportDialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ProviderSelector } from "@/components/ProviderSelector";
 import { ProviderConfigDialog } from "@/components/ProviderConfigDialog";
 import { LocalModelManager } from "@/components/LocalModelManager";
@@ -370,18 +371,28 @@ export default function Chat() {
                 >
                   <ImageIcon className="w-4 h-4" />
                 </Button>
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !messageInput.trim()}
-                  className="bg-accent text-accent-foreground hover:opacity-90"
-                  size="icon"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={isLoading || !messageInput.trim()}
+                        aria-label={isLoading ? "Sending message..." : "Send message"}
+                        className="bg-accent text-accent-foreground hover:opacity-90"
+                        size="icon"
+                      >
+                        {isLoading ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Send className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {isLoading ? "Sending..." : "Send message"}
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </>
