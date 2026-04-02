@@ -2,6 +2,12 @@ import { useState, useRef } from "react";
 import { Mic, Square, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface VoiceInputProps {
   onTranscription: (text: string) => void;
@@ -73,24 +79,36 @@ export default function VoiceInput({ onTranscription, disabled }: VoiceInputProp
     }
   };
 
+  const label = isTranscribing
+    ? "Transcribing audio..."
+    : isRecording
+      ? "Stop recording"
+      : "Start voice recording";
+
   return (
-    <button
-      onClick={isRecording ? stopRecording : startRecording}
-      disabled={disabled || isTranscribing}
-      className={`p-2 rounded transition-colors ${
-        isRecording
-          ? "bg-destructive text-destructive-foreground hover:opacity-90"
-          : "border border-border hover:bg-muted"
-      }`}
-      title={isRecording ? "Stop recording" : "Start voice recording"}
-    >
-      {isTranscribing ? (
-        <Loader2 className="w-5 h-5 animate-spin" />
-      ) : isRecording ? (
-        <Square className="w-5 h-5" />
-      ) : (
-        <Mic className="w-5 h-5" />
-      )}
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="inline-block">
+          <Button
+            type="button"
+            variant={isRecording ? "destructive" : "outline"}
+            size="icon"
+            onClick={isRecording ? stopRecording : startRecording}
+            disabled={disabled || isTranscribing}
+            aria-label={label}
+            className={isRecording ? "animate-pulse" : ""}
+          >
+            {isTranscribing ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : isRecording ? (
+              <Square className="size-5" />
+            ) : (
+              <Mic className="size-5" />
+            )}
+          </Button>
+        </span>
+      </TooltipTrigger>
+      <TooltipContent side="top">{label}</TooltipContent>
+    </Tooltip>
   );
 }
