@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut, Settings as SettingsIcon, Image as ImageIcon, BarChart3 } from "lucide-react";
 import { Streamdown } from "streamdown";
 import { useLocation } from "wouter";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import VoiceInput from "@/components/VoiceInput";
 import ImageDisplay from "@/components/ImageDisplay";
 import { ExportDialog } from "@/components/ExportDialog";
@@ -355,33 +356,50 @@ export default function Chat() {
                   onTranscription={(text) => setMessageInput(messageInput + " " + text)}
                   disabled={isLoading}
                 />
-                <Button
-                  onClick={() => {
-                    if (currentConversation && messageInput.trim()) {
-                      generateImageMutation.mutate({
-                        prompt: messageInput,
-                        conversationId: currentConversation.id,
-                      });
-                    }
-                  }}
-                  disabled={isLoading || !messageInput.trim() || !currentConversation}
-                  variant="outline"
-                  size="icon"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !messageInput.trim()}
-                  className="bg-accent text-accent-foreground hover:opacity-90"
-                  size="icon"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-block">
+                      <Button
+                        onClick={() => {
+                          if (currentConversation && messageInput.trim()) {
+                            generateImageMutation.mutate({
+                              prompt: messageInput,
+                              conversationId: currentConversation.id,
+                            });
+                          }
+                        }}
+                        disabled={isLoading || !messageInput.trim() || !currentConversation}
+                        variant="outline"
+                        size="icon"
+                        aria-label="Generate image"
+                        className="focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none"
+                      >
+                        <ImageIcon className="w-4 h-4" />
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>Generate image</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-block">
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={isLoading || !messageInput.trim()}
+                        className="bg-accent text-accent-foreground hover:opacity-90 focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none"
+                        size="icon"
+                        aria-label={isLoading ? "Sending message" : "Send message"}
+                      >
+                        {isLoading ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Send className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>{isLoading ? "Sending message" : "Send message"}</TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </>
