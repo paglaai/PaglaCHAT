@@ -1,0 +1,3 @@
+## 2025-05-15 - Improving Accessibility and Feedback for Chat Actions
+**Learning:** Icon-only buttons without tooltips or ARIA labels create significant friction for both sighted and screen-reader users. Radix-based tooltips often fail on disabled elements, requiring a wrapper (like `span`) to capture hover events.
+**Action:** Always wrap `TooltipTrigger` content in a `span` or `div` for buttons that might be disabled. Use dynamic ARIA labels and tooltip text to reflect the current state (e.g., "Sending..." vs "Send"). Remove native `title` attributes when adding custom tooltips to avoid double tooltips.
