@@ -13,6 +13,7 @@ import { ExportDialog } from "@/components/ExportDialog";
 import { ProviderSelector } from "@/components/ProviderSelector";
 import { ProviderConfigDialog } from "@/components/ProviderConfigDialog";
 import { LocalModelManager } from "@/components/LocalModelManager";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Conversation {
   id: number;
@@ -370,18 +371,26 @@ export default function Chat() {
                 >
                   <ImageIcon className="w-4 h-4" />
                 </Button>
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !messageInput.trim()}
-                  className="bg-accent text-accent-foreground hover:opacity-90"
-                  size="icon"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={isLoading || !messageInput.trim()}
+                      className="bg-accent text-accent-foreground hover:opacity-90 focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none"
+                      size="icon"
+                      aria-label={isLoading ? "Sending message" : "Send message"}
+                    >
+                      {isLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {isLoading ? "Sending..." : "Send Message"}
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </>
