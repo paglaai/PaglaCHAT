@@ -4,6 +4,11 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut, Settings as SettingsIcon, Image as ImageIcon, BarChart3 } from "lucide-react";
 import { Streamdown } from "streamdown";
 import { useLocation } from "wouter";
@@ -250,7 +255,8 @@ export default function Chat() {
                       e.stopPropagation();
                       handleArchiveConversation(conv.id);
                     }}
-                    className="text-xs text-muted-foreground hover:text-foreground"
+                    aria-label="Archive conversation"
+                    className="text-xs text-muted-foreground hover:text-foreground focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none"
                   >
                     <Archive className="w-3 h-3" />
                   </button>
@@ -259,7 +265,8 @@ export default function Chat() {
                       e.stopPropagation();
                       handleDeleteConversation(conv.id);
                     }}
-                    className="text-xs text-muted-foreground hover:text-destructive"
+                    aria-label="Delete conversation"
+                    className="text-xs text-muted-foreground hover:text-destructive focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -355,33 +362,52 @@ export default function Chat() {
                   onTranscription={(text) => setMessageInput(messageInput + " " + text)}
                   disabled={isLoading}
                 />
-                <Button
-                  onClick={() => {
-                    if (currentConversation && messageInput.trim()) {
-                      generateImageMutation.mutate({
-                        prompt: messageInput,
-                        conversationId: currentConversation.id,
-                      });
-                    }
-                  }}
-                  disabled={isLoading || !messageInput.trim() || !currentConversation}
-                  variant="outline"
-                  size="icon"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !messageInput.trim()}
-                  className="bg-accent text-accent-foreground hover:opacity-90"
-                  size="icon"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-block">
+                      <Button
+                        onClick={() => {
+                          if (currentConversation && messageInput.trim()) {
+                            generateImageMutation.mutate({
+                              prompt: messageInput,
+                              conversationId: currentConversation.id,
+                            });
+                          }
+                        }}
+                        aria-label="Generate image"
+                        disabled={isLoading || !messageInput.trim() || !currentConversation}
+                        variant="outline"
+                        size="icon"
+                      >
+                        <ImageIcon className="w-4 h-4" />
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>Generate image</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-block">
+                      <Button
+                        onClick={handleSendMessage}
+                        aria-label={isLoading ? "Sending message" : "Send message"}
+                        disabled={isLoading || !messageInput.trim()}
+                        className="bg-accent text-accent-foreground hover:opacity-90"
+                        size="icon"
+                      >
+                        {isLoading ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Send className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {isLoading ? "Sending..." : "Send message"}
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </>
