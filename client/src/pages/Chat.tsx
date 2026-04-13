@@ -251,6 +251,7 @@ export default function Chat() {
                       handleArchiveConversation(conv.id);
                     }}
                     className="text-xs text-muted-foreground hover:text-foreground"
+                    aria-label="Archive conversation"
                   >
                     <Archive className="w-3 h-3" />
                   </button>
@@ -260,6 +261,7 @@ export default function Chat() {
                       handleDeleteConversation(conv.id);
                     }}
                     className="text-xs text-muted-foreground hover:text-destructive"
+                    aria-label="Delete conversation"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -367,6 +369,7 @@ export default function Chat() {
                   disabled={isLoading || !messageInput.trim() || !currentConversation}
                   variant="outline"
                   size="icon"
+                  aria-label="Generate image"
                 >
                   <ImageIcon className="w-4 h-4" />
                 </Button>
@@ -375,6 +378,7 @@ export default function Chat() {
                   disabled={isLoading || !messageInput.trim()}
                   className="bg-accent text-accent-foreground hover:opacity-90"
                   size="icon"
+                  aria-label={isLoading ? "Sending message..." : "Send message"}
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
