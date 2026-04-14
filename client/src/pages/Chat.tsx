@@ -13,6 +13,7 @@ import { ExportDialog } from "@/components/ExportDialog";
 import { ProviderSelector } from "@/components/ProviderSelector";
 import { ProviderConfigDialog } from "@/components/ProviderConfigDialog";
 import { LocalModelManager } from "@/components/LocalModelManager";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Conversation {
   id: number;
@@ -245,24 +246,36 @@ export default function Chat() {
                   {new Date(conv.updatedAt).toLocaleDateString()}
                 </p>
                 <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchiveConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    <Archive className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-destructive"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArchiveConversation(conv.id);
+                        }}
+                        aria-label="Archive conversation"
+                        className="text-xs text-muted-foreground hover:text-foreground focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none"
+                      >
+                        <Archive className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Archive conversation</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteConversation(conv.id);
+                        }}
+                        aria-label="Delete conversation"
+                        className="text-xs text-muted-foreground hover:text-destructive focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete conversation</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             ))}
@@ -355,33 +368,45 @@ export default function Chat() {
                   onTranscription={(text) => setMessageInput(messageInput + " " + text)}
                   disabled={isLoading}
                 />
-                <Button
-                  onClick={() => {
-                    if (currentConversation && messageInput.trim()) {
-                      generateImageMutation.mutate({
-                        prompt: messageInput,
-                        conversationId: currentConversation.id,
-                      });
-                    }
-                  }}
-                  disabled={isLoading || !messageInput.trim() || !currentConversation}
-                  variant="outline"
-                  size="icon"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !messageInput.trim()}
-                  className="bg-accent text-accent-foreground hover:opacity-90"
-                  size="icon"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        onClick={() => {
+                          if (currentConversation && messageInput.trim()) {
+                            generateImageMutation.mutate({
+                              prompt: messageInput,
+                              conversationId: currentConversation.id,
+                            });
+                          }
+                        }}
+                        disabled={isLoading || !messageInput.trim() || !currentConversation}
+                        variant="outline"
+                        size="icon"
+                        aria-label="Generate image"
+                      >
+                        <ImageIcon className="w-4 h-4" />
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>Generate image</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={isLoading || !messageInput.trim()}
+                        className="bg-accent text-accent-foreground hover:opacity-90"
+                        size="icon"
+                        aria-label={isLoading ? "Sending..." : "Send message"}
+                      >
+                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>{isLoading ? "Sending..." : "Send message"}</TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </>
