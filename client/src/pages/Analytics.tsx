@@ -1,6 +1,11 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  Tooltip as UITooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { ArrowLeft, Download } from "lucide-react";
 import { useLocation } from "wouter";
@@ -64,13 +69,19 @@ export default function Analytics() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setLocation("/chat")}
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
+            <UITooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setLocation("/chat")}
+                  aria-label="Back to chat"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Back to chat</TooltipContent>
+            </UITooltip>
             <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
           </div>
           <Button variant="default" className="gap-2">
