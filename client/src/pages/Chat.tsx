@@ -18,6 +18,16 @@ import { ExportDialog } from "@/components/ExportDialog";
 import { ProviderSelector } from "@/components/ProviderSelector";
 import { ProviderConfigDialog } from "@/components/ProviderConfigDialog";
 import { LocalModelManager } from "@/components/LocalModelManager";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Conversation {
   id: number;
@@ -49,6 +59,7 @@ export default function Chat() {
   const [messageInput, setMessageInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isProviderConfigOpen, setIsProviderConfigOpen] = useState(false);
+  const [conversationToDelete, setConversationToDelete] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch conversations
@@ -262,9 +273,11 @@ export default function Chat() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteConversation(conv.id);
+                      setConversationToDelete(conv.id);
                     }}
                     className="text-xs text-muted-foreground hover:text-destructive"
+                    aria-label={`Delete conversation ${conv.title}`}
+                    title="Delete conversation"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -427,6 +440,35 @@ export default function Chat() {
             console.log("Provider config saved:", config);
           }}
         />
+
+        <AlertDialog
+          open={conversationToDelete !== null}
+          onOpenChange={(open) => !open && setConversationToDelete(null)}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                conversation and all its messages.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  if (conversationToDelete !== null) {
+                    handleDeleteConversation(conversationToDelete);
+                    setConversationToDelete(null);
+                  }
+                }}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
