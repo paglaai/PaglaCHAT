@@ -130,6 +130,7 @@ export default function Chat() {
   };
 
   const handleDeleteConversation = async (convId: number) => {
+    if (!window.confirm("Are you sure you want to delete this conversation?")) return;
     try {
       await deleteConvMutation.mutateAsync({ conversationId: convId });
       setConversations((prev) => prev.filter((c) => c.id !== convId));
@@ -250,24 +251,36 @@ export default function Chat() {
                   {new Date(conv.updatedAt).toLocaleDateString()}
                 </p>
                 <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchiveConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    <Archive className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-destructive"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArchiveConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-foreground"
+                        aria-label="Archive conversation"
+                      >
+                        <Archive className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Archive conversation</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-destructive"
+                        aria-label="Delete conversation"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete conversation</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             ))}
