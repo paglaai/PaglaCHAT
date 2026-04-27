@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -130,6 +131,14 @@ export default function Chat() {
   };
 
   const handleDeleteConversation = async (convId: number) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this conversation? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
     try {
       await deleteConvMutation.mutateAsync({ conversationId: convId });
       setConversations((prev) => prev.filter((c) => c.id !== convId));
@@ -137,8 +146,10 @@ export default function Chat() {
         setCurrentConversation(null);
         setMessages([]);
       }
-    } catch (error) {
+      toast.success("Conversation deleted");
+    } catch (error: any) {
       console.error("Failed to delete conversation:", error);
+      toast.error(error.message || "Failed to delete conversation");
     }
   };
 
@@ -148,8 +159,10 @@ export default function Chat() {
       setConversations((prev) =>
         prev.map((c) => (c.id === convId ? { ...c, isArchived: true } : c))
       );
-    } catch (error) {
+      toast.success("Conversation archived");
+    } catch (error: any) {
       console.error("Failed to archive conversation:", error);
+      toast.error(error.message || "Failed to archive conversation");
     }
   };
 
@@ -250,24 +263,80 @@ export default function Chat() {
                   {new Date(conv.updatedAt).toLocaleDateString()}
                 </p>
                 <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchiveConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    <Archive className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-destructive"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArchiveConversation(conv.id);
+                        }}
+                        disabled={
+                          archiveConvMutation.isPending &&
+                          archiveConvMutation.variables?.conversationId ===
+                            conv.id
+                        }
+                        className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-50"
+                        aria-label={
+                          archiveConvMutation.isPending &&
+                          archiveConvMutation.variables?.conversationId ===
+                            conv.id
+                            ? "Archiving..."
+                            : "Archive conversation"
+                        }
+                      >
+                        {archiveConvMutation.isPending &&
+                        archiveConvMutation.variables?.conversationId ===
+                          conv.id ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Archive className="w-3 h-3" />
+                        )}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {archiveConvMutation.isPending &&
+                      archiveConvMutation.variables?.conversationId === conv.id
+                        ? "Archiving..."
+                        : "Archive conversation"}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteConversation(conv.id);
+                        }}
+                        disabled={
+                          deleteConvMutation.isPending &&
+                          deleteConvMutation.variables?.conversationId ===
+                            conv.id
+                        }
+                        className="text-xs text-muted-foreground hover:text-destructive disabled:opacity-50"
+                        aria-label={
+                          deleteConvMutation.isPending &&
+                          deleteConvMutation.variables?.conversationId ===
+                            conv.id
+                            ? "Deleting..."
+                            : "Delete conversation"
+                        }
+                      >
+                        {deleteConvMutation.isPending &&
+                        deleteConvMutation.variables?.conversationId ===
+                          conv.id ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Trash2 className="w-3 h-3" />
+                        )}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {deleteConvMutation.isPending &&
+                      deleteConvMutation.variables?.conversationId === conv.id
+                        ? "Deleting..."
+                        : "Delete conversation"}
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             ))}
