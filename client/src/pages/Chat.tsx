@@ -12,6 +12,7 @@ import {
 import { Loader2, Send, Plus, Trash2, Archive, FileText, LogOut, Settings as SettingsIcon, Image as ImageIcon, BarChart3 } from "lucide-react";
 import { Streamdown } from "streamdown";
 import { useLocation } from "wouter";
+import { toast } from "sonner";
 import VoiceInput from "@/components/VoiceInput";
 import ImageDisplay from "@/components/ImageDisplay";
 import { ExportDialog } from "@/components/ExportDialog";
@@ -87,7 +88,9 @@ export default function Chat() {
       if (conversationsList) {
         setConversations(conversationsList);
       }
+      toast.success("New conversation created");
     } catch (error) {
+      toast.error("Failed to create conversation");
       console.error("Failed to create conversation:", error);
     }
   };
@@ -130,6 +133,10 @@ export default function Chat() {
   };
 
   const handleDeleteConversation = async (convId: number) => {
+    if (!window.confirm("Are you sure you want to delete this conversation? This action cannot be undone.")) {
+      return;
+    }
+
     try {
       await deleteConvMutation.mutateAsync({ conversationId: convId });
       setConversations((prev) => prev.filter((c) => c.id !== convId));
@@ -137,7 +144,9 @@ export default function Chat() {
         setCurrentConversation(null);
         setMessages([]);
       }
+      toast.success("Conversation deleted");
     } catch (error) {
+      toast.error("Failed to delete conversation");
       console.error("Failed to delete conversation:", error);
     }
   };
@@ -148,7 +157,9 @@ export default function Chat() {
       setConversations((prev) =>
         prev.map((c) => (c.id === convId ? { ...c, isArchived: true } : c))
       );
+      toast.success("Conversation archived");
     } catch (error) {
+      toast.error("Failed to archive conversation");
       console.error("Failed to archive conversation:", error);
     }
   };
@@ -223,9 +234,13 @@ export default function Chat() {
           <Button
             onClick={handleCreateConversation}
             className="w-full bg-accent text-accent-foreground hover:opacity-90"
-            disabled={!selectedModel}
+            disabled={!selectedModel || createConvMutation.isPending}
           >
-            <Plus className="w-4 h-4 mr-2" />
+            {createConvMutation.isPending ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <Plus className="w-4 h-4 mr-2" />
+            )}
             New Chat
           </Button>
         </div>
@@ -250,24 +265,36 @@ export default function Chat() {
                   {new Date(conv.updatedAt).toLocaleDateString()}
                 </p>
                 <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchiveConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    <Archive className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-destructive"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArchiveConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-foreground"
+                        aria-label="Archive conversation"
+                      >
+                        <Archive className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Archive conversation</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-destructive"
+                        aria-label="Delete conversation"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete conversation</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             ))}
