@@ -362,24 +362,43 @@ export default function Chat() {
                 />
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      onClick={() => {
-                        if (currentConversation && messageInput.trim()) {
-                          generateImageMutation.mutate({
-                            prompt: messageInput,
-                            conversationId: currentConversation.id,
-                          });
+                    <span className="inline-block">
+                      <Button
+                        onClick={() => {
+                          if (currentConversation && messageInput.trim()) {
+                            generateImageMutation.mutate({
+                              prompt: messageInput,
+                              conversationId: currentConversation.id,
+                            });
+                          }
+                        }}
+                        disabled={
+                          isLoading ||
+                          generateImageMutation.isPending ||
+                          !messageInput.trim() ||
+                          !currentConversation
                         }
-                      }}
-                      disabled={isLoading || !messageInput.trim() || !currentConversation}
-                      variant="outline"
-                      size="icon"
-                      aria-label="Generate image"
-                    >
-                      <ImageIcon className="w-4 h-4" />
-                    </Button>
+                        variant="outline"
+                        size="icon"
+                        aria-label={
+                          generateImageMutation.isPending
+                            ? "Generating image..."
+                            : "Generate image"
+                        }
+                      >
+                        {generateImageMutation.isPending ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <ImageIcon className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </span>
                   </TooltipTrigger>
-                  <TooltipContent>Generate image</TooltipContent>
+                  <TooltipContent>
+                    {generateImageMutation.isPending
+                      ? "Generating image..."
+                      : "Generate image"}
+                  </TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
