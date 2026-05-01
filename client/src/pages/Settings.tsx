@@ -3,6 +3,13 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Loader2, Save, LogOut, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -87,12 +94,18 @@ export default function Settings() {
       <div className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/")}
-              className="p-2 hover:bg-muted transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => navigate("/")}
+                  className="p-2 hover:bg-muted transition-colors"
+                  aria-label="Go back"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Go back</TooltipContent>
+            </Tooltip>
             <h1 className="text-2xl font-bold text-foreground">Settings</h1>
           </div>
         </div>
@@ -145,30 +158,30 @@ export default function Settings() {
                   <h2 className="text-xl font-semibold text-foreground mb-4">Profile Information</h2>
                   <div className="space-y-4 border border-border bg-card p-6">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                         Name
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="name"
                         value={user?.name || ""}
                         disabled
                         className="bg-muted"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                         Email
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="email"
                         value={user?.email || ""}
                         disabled
                         className="bg-muted"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="member-since" className="block text-sm font-medium text-foreground mb-2">
                         Member Since
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="member-since"
                         value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
                         disabled
                         className="bg-muted"
@@ -204,10 +217,10 @@ export default function Settings() {
 
                   <div className="space-y-4 border border-border bg-card p-6">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="openai-api-key" className="block text-sm font-medium text-foreground mb-2">
                         OpenAI API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="openai-api-key"
                         type="password"
                         placeholder="sk-..."
                         value={apiKeys.openai}
@@ -221,10 +234,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="anthropic-api-key" className="block text-sm font-medium text-foreground mb-2">
                         Anthropic API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="anthropic-api-key"
                         type="password"
                         placeholder="sk-ant-..."
                         value={apiKeys.anthropic}
@@ -238,10 +251,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="groq-api-key" className="block text-sm font-medium text-foreground mb-2">
                         Groq API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="groq-api-key"
                         type="password"
                         placeholder="gsk_..."
                         value={apiKeys.groq}
@@ -255,10 +268,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="together-ai-api-key" className="block text-sm font-medium text-foreground mb-2">
                         Together AI API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="together-ai-api-key"
                         type="password"
                         placeholder="..."
                         value={apiKeys.together}
@@ -276,10 +289,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="google-gemini-api-key" className="block text-sm font-medium text-foreground mb-2">
                         Google Gemini API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="google-gemini-api-key"
                         type="password"
                         placeholder="AIza..."
                         value={apiKeys.gemini}
@@ -293,10 +306,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="openrouter-api-key" className="block text-sm font-medium text-foreground mb-2">
                         OpenRouter API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="openrouter-api-key"
                         type="password"
                         placeholder="sk-or-..."
                         value={apiKeys.openrouter}
@@ -310,10 +323,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="llamabarn-api-key" className="block text-sm font-medium text-foreground mb-2">
                         LlamaBarn API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="llamabarn-api-key"
                         type="password"
                         placeholder="..."
                         value={apiKeys.llamabarn}
@@ -327,10 +340,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="qwen-api-key" className="block text-sm font-medium text-foreground mb-2">
                         Qwen API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="qwen-api-key"
                         type="password"
                         placeholder="..."
                         value={apiKeys.qwen}
@@ -344,10 +357,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="zhipu-api-key" className="block text-sm font-medium text-foreground mb-2">
                         Zhipu API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="zhipu-api-key"
                         type="password"
                         placeholder="..."
                         value={apiKeys.zhipu}
@@ -361,10 +374,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="kimi-api-key" className="block text-sm font-medium text-foreground mb-2">
                         Kimi API Key
-                      </label>
-                      <Input
+                      </Label>
+                      <Input id="kimi-api-key"
                         type="password"
                         placeholder="..."
                         value={apiKeys.kimi}
@@ -407,10 +420,10 @@ export default function Settings() {
 
                   <div className="space-y-4 border border-border bg-card p-6">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="default-model" className="block text-sm font-medium text-foreground mb-2">
                         Default Model
-                      </label>
-                      <select
+                      </Label>
+                      <select id="default-model"
                         value={preferences.defaultModel}
                         onChange={(e) =>
                           setPreferences({
@@ -430,10 +443,10 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="default-system-prompt" className="block text-sm font-medium text-foreground mb-2">
                         Default System Prompt
-                      </label>
-                      <select
+                      </Label>
+                      <select id="default-system-prompt"
                         value={preferences.defaultSystemPrompt}
                         onChange={(e) =>
                           setPreferences({
@@ -452,44 +465,48 @@ export default function Settings() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="auto-save"
+                        className="text-sm font-medium text-foreground cursor-pointer"
+                      >
                         Auto-save Conversations
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="auto-save"
                         checked={preferences.autoSaveConversations}
-                        onChange={(e) =>
+                        onCheckedChange={(checked) =>
                           setPreferences({
                             ...preferences,
-                            autoSaveConversations: e.target.checked,
+                            autoSaveConversations: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="notifications"
+                        className="text-sm font-medium text-foreground cursor-pointer"
+                      >
                         Enable Notifications
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="notifications"
                         checked={preferences.enableNotifications}
-                        onChange={(e) =>
+                        onCheckedChange={(checked) =>
                           setPreferences({
                             ...preferences,
-                            enableNotifications: e.target.checked,
+                            enableNotifications: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="theme" className="block text-sm font-medium text-foreground mb-2">
                         Theme
-                      </label>
-                      <select
+                      </Label>
+                      <select id="theme"
                         value={preferences.theme}
                         onChange={(e) =>
                           setPreferences({
