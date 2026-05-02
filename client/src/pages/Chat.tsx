@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -137,8 +138,10 @@ export default function Chat() {
         setCurrentConversation(null);
         setMessages([]);
       }
+      toast.success("Conversation deleted");
     } catch (error) {
       console.error("Failed to delete conversation:", error);
+      toast.error("Failed to delete conversation");
     }
   };
 
@@ -148,8 +151,10 @@ export default function Chat() {
       setConversations((prev) =>
         prev.map((c) => (c.id === convId ? { ...c, isArchived: true } : c))
       );
+      toast.success("Conversation archived");
     } catch (error) {
       console.error("Failed to archive conversation:", error);
+      toast.error("Failed to archive conversation");
     }
   };
 
@@ -250,24 +255,36 @@ export default function Chat() {
                   {new Date(conv.updatedAt).toLocaleDateString()}
                 </p>
                 <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchiveConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    <Archive className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteConversation(conv.id);
-                    }}
-                    className="text-xs text-muted-foreground hover:text-destructive"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArchiveConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-foreground"
+                        aria-label="Archive conversation"
+                      >
+                        <Archive className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Archive conversation</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteConversation(conv.id);
+                        }}
+                        className="text-xs text-muted-foreground hover:text-destructive"
+                        aria-label="Delete conversation"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete conversation</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             ))}
