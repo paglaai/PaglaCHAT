@@ -3,6 +3,12 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Loader2, Save, LogOut, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -87,12 +93,18 @@ export default function Settings() {
       <div className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/")}
-              className="p-2 hover:bg-muted transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => navigate("/")}
+                  className="p-2 hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-label="Go back"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Go back</TooltipContent>
+            </Tooltip>
             <h1 className="text-2xl font-bold text-foreground">Settings</h1>
           </div>
         </div>
@@ -145,30 +157,33 @@ export default function Settings() {
                   <h2 className="text-xl font-semibold text-foreground mb-4">Profile Information</h2>
                   <div className="space-y-4 border border-border bg-card p-6">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="profile-name" className="block mb-2">
                         Name
-                      </label>
+                      </Label>
                       <Input
+                        id="profile-name"
                         value={user?.name || ""}
                         disabled
                         className="bg-muted"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="profile-email" className="block mb-2">
                         Email
-                      </label>
+                      </Label>
                       <Input
+                        id="profile-email"
                         value={user?.email || ""}
                         disabled
                         className="bg-muted"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
+                      <Label htmlFor="profile-member-since" className="block mb-2">
                         Member Since
-                      </label>
+                      </Label>
                       <Input
+                        id="profile-member-since"
                         value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
                         disabled
                         className="bg-muted"
