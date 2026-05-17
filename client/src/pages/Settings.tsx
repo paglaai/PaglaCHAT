@@ -3,6 +3,8 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Loader2, Save, LogOut, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -452,36 +454,34 @@ export default function Settings() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label htmlFor="auto-save" className="text-foreground">
                         Auto-save Conversations
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="auto-save"
                         checked={preferences.autoSaveConversations}
-                        onChange={(e) =>
+                        onCheckedChange={(checked) =>
                           setPreferences({
                             ...preferences,
-                            autoSaveConversations: e.target.checked,
+                            autoSaveConversations: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label htmlFor="notifications" className="text-foreground">
                         Enable Notifications
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="notifications"
                         checked={preferences.enableNotifications}
-                        onChange={(e) =>
+                        onCheckedChange={(checked) =>
                           setPreferences({
                             ...preferences,
-                            enableNotifications: e.target.checked,
+                            enableNotifications: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
