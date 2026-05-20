@@ -159,7 +159,9 @@ async function seedProviders() {
     console.log("\n✅ All providers seeded successfully!");
     console.log(`Total providers: ${providers.length}`);
     console.log("\nProvider Summary:");
-    console.log("- Cloud providers: 7 (Gemini, OpenRouter, LlamaBarn, Qwen, Zhipu, Kimi, Together AI)");
+    console.log(
+      "- Cloud providers: 7 (Gemini, OpenRouter, LlamaBarn, Qwen, Zhipu, Kimi, Together AI)"
+    );
     console.log("- Local providers: 4 (Ollama, LM Studio, Llama.cpp, ComfyUI)");
   } catch (error) {
     console.error("❌ Error seeding providers:", error);

@@ -283,18 +283,21 @@ Step 4: Transcribed text added
 ## 11. Responsive Breakpoints
 
 ### Mobile (< 640px)
+
 - Single column layout
 - Sidebar collapses into hamburger menu
 - Full-width chat area
 - Stacked input controls
 
 ### Tablet (640px - 1024px)
+
 - Two-column layout
 - Sidebar takes 40% width
 - Chat area takes 60% width
 - Flexible input controls
 
 ### Desktop (> 1024px)
+
 - Two-column layout
 - Sidebar fixed at 256px
 - Chat area takes remaining width
@@ -319,18 +322,21 @@ Step 4: Transcribed text added
 ## 14. Interaction States
 
 ### Buttons
+
 - **Default**: Red background, white text
 - **Hover**: Opacity 90%
 - **Active**: Opacity 80%
 - **Disabled**: Gray background, reduced opacity
 
 ### Input Fields
+
 - **Default**: White background, gray border
 - **Focus**: Red border
 - **Error**: Red border, error text below
 - **Disabled**: Gray background
 
 ### Links
+
 - **Default**: Red text, underline on hover
 - **Visited**: Dark gray text
 - **Hover**: Opacity 80%

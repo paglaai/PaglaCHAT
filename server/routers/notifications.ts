@@ -3,14 +3,19 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { eq, desc, and } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
-import { notifications, notificationPreferences } from "../../drizzle/notifications";
+import {
+  notifications,
+  notificationPreferences,
+} from "../../drizzle/notifications";
 
 export const notificationsRouter = router({
   // Create a notification
   create: protectedProcedure
     .input(
       z.object({
-        type: z.enum(["info", "success", "warning", "error", "custom"]).default("info"),
+        type: z
+          .enum(["info", "success", "warning", "error", "custom"])
+          .default("info"),
         title: z.string().min(1).max(255),
         message: z.string().min(1),
         icon: z.string().optional(),
@@ -46,7 +51,9 @@ export const notificationsRouter = router({
         limit: z.number().default(20),
         offset: z.number().default(0),
         unreadOnly: z.boolean().optional(),
-        type: z.enum(["info", "success", "warning", "error", "custom"]).optional(),
+        type: z
+          .enum(["info", "success", "warning", "error", "custom"])
+          .optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -66,7 +73,11 @@ export const notificationsRouter = router({
       const result = await db
         .select()
         .from(notifications)
-        .where(whereConditions.length > 1 ? and(...whereConditions) : whereConditions[0])
+        .where(
+          whereConditions.length > 1
+            ? and(...whereConditions)
+            : whereConditions[0]
+        )
         .orderBy(desc(notifications.createdAt))
         .limit(input.limit)
         .offset(input.offset);
@@ -91,7 +102,10 @@ export const notificationsRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
-      await db.update(notifications).set({ isRead: true }).where(eq(notifications.id, input.id));
+      await db
+        .update(notifications)
+        .set({ isRead: true })
+        .where(eq(notifications.id, input.id));
 
       return { success: true };
     }),
@@ -198,12 +212,22 @@ export const notificationsRouter = router({
         await db
           .update(notificationPreferences)
           .set({
-            enableNotifications: input.enableNotifications ?? existing[0].enableNotifications,
-            enableSoundNotifications: input.enableSoundNotifications ?? existing[0].enableSoundNotifications,
-            enableBadgeNotifications: input.enableBadgeNotifications ?? existing[0].enableBadgeNotifications,
-            enableEmailNotifications: input.enableEmailNotifications ?? existing[0].enableEmailNotifications,
-            notificationTypes: input.notificationTypes ? JSON.stringify(input.notificationTypes) : existing[0].notificationTypes,
-            quietHoursStart: input.quietHoursStart ?? existing[0].quietHoursStart,
+            enableNotifications:
+              input.enableNotifications ?? existing[0].enableNotifications,
+            enableSoundNotifications:
+              input.enableSoundNotifications ??
+              existing[0].enableSoundNotifications,
+            enableBadgeNotifications:
+              input.enableBadgeNotifications ??
+              existing[0].enableBadgeNotifications,
+            enableEmailNotifications:
+              input.enableEmailNotifications ??
+              existing[0].enableEmailNotifications,
+            notificationTypes: input.notificationTypes
+              ? JSON.stringify(input.notificationTypes)
+              : existing[0].notificationTypes,
+            quietHoursStart:
+              input.quietHoursStart ?? existing[0].quietHoursStart,
             quietHoursEnd: input.quietHoursEnd ?? existing[0].quietHoursEnd,
           } as any)
           .where(eq(notificationPreferences.userId, ctx.user.id));
@@ -214,7 +238,9 @@ export const notificationsRouter = router({
           enableSoundNotifications: input.enableSoundNotifications ?? true,
           enableBadgeNotifications: input.enableBadgeNotifications ?? true,
           enableEmailNotifications: input.enableEmailNotifications ?? false,
-          notificationTypes: input.notificationTypes ? JSON.stringify(input.notificationTypes) : null,
+          notificationTypes: input.notificationTypes
+            ? JSON.stringify(input.notificationTypes)
+            : null,
           quietHoursStart: input.quietHoursStart,
           quietHoursEnd: input.quietHoursEnd,
         } as any);
@@ -231,7 +257,12 @@ export const notificationsRouter = router({
     const result = await db
       .select()
       .from(notifications)
-      .where(and(eq(notifications.userId, ctx.user.id), eq(notifications.isRead, false)));
+      .where(
+        and(
+          eq(notifications.userId, ctx.user.id),
+          eq(notifications.isRead, false)
+        )
+      );
 
     return { count: result.length };
   }),

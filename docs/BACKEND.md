@@ -26,21 +26,22 @@ DirtyChat backend follows a **layered architecture** with clear separation of co
 
 ## Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **API Framework** | tRPC 11 | Type-safe RPC with end-to-end type inference |
-| **Runtime** | Node.js + Express 4 | Server runtime and HTTP framework |
-| **Database** | MySQL/TiDB | Relational data storage |
-| **ORM** | Drizzle ORM | Type-safe database access |
-| **Authentication** | Manus OAuth + JWT | User authentication and session management |
-| **File Storage** | AWS S3 | Document and image storage |
-| **LLM Integration** | Provider APIs | OpenAI, Anthropic, Groq, Together AI |
-| **Voice Processing** | Whisper API | Audio transcription |
-| **Image Generation** | Image API | Text-to-image generation |
+| Layer                | Technology          | Purpose                                      |
+| -------------------- | ------------------- | -------------------------------------------- |
+| **API Framework**    | tRPC 11             | Type-safe RPC with end-to-end type inference |
+| **Runtime**          | Node.js + Express 4 | Server runtime and HTTP framework            |
+| **Database**         | MySQL/TiDB          | Relational data storage                      |
+| **ORM**              | Drizzle ORM         | Type-safe database access                    |
+| **Authentication**   | Manus OAuth + JWT   | User authentication and session management   |
+| **File Storage**     | AWS S3              | Document and image storage                   |
+| **LLM Integration**  | Provider APIs       | OpenAI, Anthropic, Groq, Together AI         |
+| **Voice Processing** | Whisper API         | Audio transcription                          |
+| **Image Generation** | Image API           | Text-to-image generation                     |
 
 ## Database Schema
 
 ### Users Table
+
 ```sql
 CREATE TABLE users (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -56,6 +57,7 @@ CREATE TABLE users (
 ```
 
 ### Conversations Table
+
 ```sql
 CREATE TABLE conversations (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -73,6 +75,7 @@ CREATE TABLE conversations (
 ```
 
 ### Messages Table
+
 ```sql
 CREATE TABLE messages (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -86,6 +89,7 @@ CREATE TABLE messages (
 ```
 
 ### Models Table
+
 ```sql
 CREATE TABLE models (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -101,6 +105,7 @@ CREATE TABLE models (
 ```
 
 ### System Prompts Table
+
 ```sql
 CREATE TABLE systemPrompts (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -113,6 +118,7 @@ CREATE TABLE systemPrompts (
 ```
 
 ### Documents Table
+
 ```sql
 CREATE TABLE documents (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -128,6 +134,7 @@ CREATE TABLE documents (
 ```
 
 ### Document Chunks Table
+
 ```sql
 CREATE TABLE documentChunks (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -141,6 +148,7 @@ CREATE TABLE documentChunks (
 ```
 
 ### Tools Table
+
 ```sql
 CREATE TABLE tools (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -157,42 +165,50 @@ CREATE TABLE tools (
 ### Chat Router
 
 **chat.createConversation**
+
 - Input: `{ title: string, modelId: number, systemPromptId?: number }`
 - Output: `{ id: number, title: string, createdAt: Date }`
 - Auth: Protected
 
 **chat.sendMessage**
+
 - Input: `{ conversationId: number, message: string, useRAG?: boolean }`
 - Output: `{ messageId: number, response: string, tokensUsed: number }`
 - Auth: Protected
 - Features: Streaming support, RAG integration, tool calling
 
 **chat.listConversations**
+
 - Input: None
 - Output: `Conversation[]`
 - Auth: Protected
 
 **chat.getConversation**
+
 - Input: `{ conversationId: number }`
 - Output: `{ conversation: Conversation, messages: Message[] }`
 - Auth: Protected
 
 **chat.deleteConversation**
+
 - Input: `{ conversationId: number }`
 - Output: `{ success: boolean }`
 - Auth: Protected
 
 **chat.archiveConversation**
+
 - Input: `{ conversationId: number }`
 - Output: `{ success: boolean }`
 - Auth: Protected
 
 **chat.listModels**
+
 - Input: None
 - Output: `Model[]`
 - Auth: Public
 
 **chat.listSystemPrompts**
+
 - Input: None
 - Output: `SystemPrompt[]`
 - Auth: Public
@@ -200,22 +216,26 @@ CREATE TABLE tools (
 ### Documents Router
 
 **documents.uploadDocument**
+
 - Input: `{ title: string, fileName: string, fileType: string, content: string }`
 - Output: `{ documentId: number, chunks: number }`
 - Auth: Protected
 - Features: Automatic chunking, S3 upload
 
 **documents.listDocuments**
+
 - Input: None
 - Output: `Document[]`
 - Auth: Protected
 
 **documents.deleteDocument**
+
 - Input: `{ documentId: number }`
 - Output: `{ success: boolean }`
 - Auth: Protected
 
 **documents.searchDocuments**
+
 - Input: `{ query: string, limit?: number }`
 - Output: `DocumentChunk[]`
 - Auth: Protected
@@ -224,6 +244,7 @@ CREATE TABLE tools (
 ### Voice Router
 
 **voice.transcribeAudio**
+
 - Input: `{ audioUrl: string, language?: string, prompt?: string }`
 - Output: `{ text: string, language: string, segments: Segment[] }`
 - Auth: Protected
@@ -232,12 +253,14 @@ CREATE TABLE tools (
 ### Images Router
 
 **images.generateImage**
+
 - Input: `{ prompt: string, conversationId: number }`
 - Output: `{ imageUrl: string, prompt: string }`
 - Auth: Protected
 - External: Image Generation API
 
 **images.editImage**
+
 - Input: `{ imageUrl: string, prompt: string, conversationId: number }`
 - Output: `{ imageUrl: string, prompt: string }`
 - Auth: Protected
@@ -245,11 +268,13 @@ CREATE TABLE tools (
 ### Tools Router
 
 **tools.listTools**
+
 - Input: None
 - Output: `Tool[]`
 - Auth: Protected
 
 **tools.executeTool**
+
 - Input: `{ toolName: string, parameters: Record<string, any> }`
 - Output: `{ result: any, success: boolean }`
 - Auth: Protected
@@ -257,11 +282,13 @@ CREATE TABLE tools (
 ### Auth Router
 
 **auth.me**
+
 - Input: None
 - Output: `User | null`
 - Auth: Public
 
 **auth.logout**
+
 - Input: None
 - Output: `{ success: boolean }`
 - Auth: Protected
@@ -272,7 +299,7 @@ CREATE TABLE tools (
 
 ```typescript
 interface LLMMessage {
-  role: 'system' | 'user' | 'assistant' | 'tool';
+  role: "system" | "user" | "assistant" | "tool";
   content: string | ContentBlock[];
 }
 
@@ -283,7 +310,7 @@ interface LLMRequest {
   maxTokens?: number;
   systemPrompt?: string;
   tools?: Tool[];
-  toolChoice?: 'auto' | 'none' | 'required';
+  toolChoice?: "auto" | "none" | "required";
 }
 
 interface LLMResponse {
@@ -298,6 +325,7 @@ interface LLMResponse {
 ### Provider Adapters
 
 Each provider (OpenAI, Anthropic, Groq, Together AI) has an adapter that:
+
 1. Translates unified request to provider-specific format
 2. Handles authentication and rate limiting
 3. Processes provider-specific responses
@@ -306,6 +334,7 @@ Each provider (OpenAI, Anthropic, Groq, Together AI) has an adapter that:
 ### Streaming Support
 
 Streaming responses are handled through Server-Sent Events (SSE) with:
+
 - Token-by-token streaming
 - Automatic retry on connection loss
 - Graceful degradation to polling
@@ -333,19 +362,19 @@ Streaming responses are handled through Server-Sent Events (SSE) with:
 
 ```typescript
 enum UserRole {
-  USER = 'user',
-  ADMIN = 'admin'
+  USER = "user",
+  ADMIN = "admin",
 }
 
 // Protected procedure example
 const protectedProcedure = baseProcedure.use(({ ctx, next }) => {
-  if (!ctx.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
+  if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
   return next({ ctx });
 });
 
 // Admin procedure example
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== 'admin') throw new TRPCError({ code: 'FORBIDDEN' });
+  if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
   return next({ ctx });
 });
 ```
@@ -354,19 +383,19 @@ const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 
 ### Error Types
 
-| Code | Status | Description |
-|------|--------|-------------|
-| PARSE_ERROR | 400 | Invalid input |
-| BAD_REQUEST | 400 | Malformed request |
-| UNAUTHORIZED | 401 | Authentication required |
-| FORBIDDEN | 403 | Insufficient permissions |
-| NOT_FOUND | 404 | Resource not found |
-| CONFLICT | 409 | Resource conflict |
-| PRECONDITION_FAILED | 412 | Precondition failed |
-| PAYLOAD_TOO_LARGE | 413 | Request too large |
-| UNPROCESSABLE_CONTENT | 422 | Cannot process request |
-| TOO_MANY_REQUESTS | 429 | Rate limit exceeded |
-| INTERNAL_SERVER_ERROR | 500 | Server error |
+| Code                  | Status | Description              |
+| --------------------- | ------ | ------------------------ |
+| PARSE_ERROR           | 400    | Invalid input            |
+| BAD_REQUEST           | 400    | Malformed request        |
+| UNAUTHORIZED          | 401    | Authentication required  |
+| FORBIDDEN             | 403    | Insufficient permissions |
+| NOT_FOUND             | 404    | Resource not found       |
+| CONFLICT              | 409    | Resource conflict        |
+| PRECONDITION_FAILED   | 412    | Precondition failed      |
+| PAYLOAD_TOO_LARGE     | 413    | Request too large        |
+| UNPROCESSABLE_CONTENT | 422    | Cannot process request   |
+| TOO_MANY_REQUESTS     | 429    | Rate limit exceeded      |
+| INTERNAL_SERVER_ERROR | 500    | Server error             |
 
 ### Error Response Format
 

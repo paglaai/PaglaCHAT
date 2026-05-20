@@ -7,7 +7,11 @@ import { storagePut, storageGet } from "../storage";
 import { getUserDocuments } from "../db";
 
 // Simple text chunking function (in production, use more sophisticated chunking)
-function chunkText(text: string, chunkSize: number = 1000, overlap: number = 200): string[] {
+function chunkText(
+  text: string,
+  chunkSize: number = 1000,
+  overlap: number = 200
+): string[] {
   const chunks: string[] = [];
   let i = 0;
 
@@ -24,14 +28,14 @@ function chunkText(text: string, chunkSize: number = 1000, overlap: number = 200
 function calculateSimilarity(query: string, text: string): number {
   const queryWords = query.toLowerCase().split(/\s+/);
   const textWords = text.toLowerCase().split(/\s+/);
-  
+
   let matches = 0;
   for (const word of queryWords) {
     if (textWords.some(w => w.includes(word) || word.includes(w))) {
       matches++;
     }
   }
-  
+
   return matches / Math.max(queryWords.length, 1);
 }
 
@@ -53,7 +57,11 @@ export const documentsRouter = router({
       try {
         // Upload file to S3
         const s3Key = `documents/${ctx.user.id}/${Date.now()}-${input.fileName}`;
-        const { url: s3Url } = await storagePut(s3Key, input.content, input.fileType);
+        const { url: s3Url } = await storagePut(
+          s3Key,
+          input.content,
+          input.fileType
+        );
 
         // Create document record
         const result = await db.insert(documents).values({
@@ -132,9 +140,7 @@ export const documentsRouter = router({
         .where(eq(documentChunks.documentId, input.documentId));
 
       // Delete document
-      await db
-        .delete(documents)
-        .where(eq(documents.id, input.documentId));
+      await db.delete(documents).where(eq(documents.id, input.documentId));
 
       return { success: true };
     }),
@@ -167,7 +173,7 @@ export const documentsRouter = router({
         .where(inArray(documentChunks.documentId, docIds));
 
       // Score and sort chunks by relevance
-      const scoredChunks = allChunks.map((chunk) => ({
+      const scoredChunks = allChunks.map(chunk => ({
         ...chunk,
         score: calculateSimilarity(input.query, chunk.chunkText),
       }));
@@ -176,7 +182,7 @@ export const documentsRouter = router({
       return scoredChunks
         .sort((a, b) => b.score - a.score)
         .slice(0, input.limit)
-        .map((chunk) => ({
+        .map(chunk => ({
           documentId: chunk.documentId,
           chunkIndex: chunk.chunkIndex,
           content: chunk.chunkText,

@@ -17,7 +17,10 @@ interface ExportDialogProps {
   conversationTitle?: string;
 }
 
-export function ExportDialog({ conversationId, conversationTitle }: ExportDialogProps) {
+export function ExportDialog({
+  conversationId,
+  conversationTitle,
+}: ExportDialogProps) {
   const [open, setOpen] = useState(false);
   const [exporting, setExporting] = useState<string | null>(null);
 
@@ -82,7 +85,11 @@ export function ExportDialog({ conversationId, conversationTitle }: ExportDialog
     }
   };
 
-  const downloadFile = (content: string, filename: string, mimeType: string) => {
+  const downloadFile = (
+    content: string,
+    filename: string,
+    mimeType: string
+  ) => {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

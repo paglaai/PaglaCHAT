@@ -1,7 +1,19 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 import { ArrowLeft, Download } from "lucide-react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
@@ -10,8 +22,12 @@ import { useEffect, useState } from "react";
 export default function Analytics() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  const [modelUsage, setModelUsage] = useState<{ name: string; value: number }[]>([]);
-  const [conversationStats, setConversationStats] = useState<{ name: string; value: number }[]>([]);
+  const [modelUsage, setModelUsage] = useState<
+    { name: string; value: number }[]
+  >([]);
+  const [conversationStats, setConversationStats] = useState<
+    { name: string; value: number }[]
+  >([]);
 
   const { data: conversations } = trpc.chat.listConversations.useQuery();
   const { data: models } = trpc.chat.listModels.useQuery();
@@ -20,19 +36,21 @@ export default function Analytics() {
     if (conversations && models) {
       // Calculate model usage
       const modelCounts: Record<number, number> = {};
-      conversations.forEach((conv) => {
+      conversations.forEach(conv => {
         if (conv.modelId) {
           modelCounts[conv.modelId] = (modelCounts[conv.modelId] || 0) + 1;
         }
       });
 
-      const modelUsageData = Object.entries(modelCounts).map(([modelId, count]) => {
-        const model = models.find((m) => m.id === parseInt(modelId));
-        return {
-          name: model?.name || "Unknown",
-          value: count,
-        };
-      });
+      const modelUsageData = Object.entries(modelCounts).map(
+        ([modelId, count]) => {
+          const model = models.find(m => m.id === parseInt(modelId));
+          return {
+            name: model?.name || "Unknown",
+            value: count,
+          };
+        }
+      );
 
       setModelUsage(modelUsageData);
 
@@ -42,10 +60,10 @@ export default function Analytics() {
       const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
       const conversationsLast7 = conversations.filter(
-        (c) => new Date(c.createdAt) > last7Days
+        c => new Date(c.createdAt) > last7Days
       ).length;
       const conversationsLast30 = conversations.filter(
-        (c) => new Date(c.createdAt) > last30Days
+        c => new Date(c.createdAt) > last30Days
       ).length;
 
       setConversationStats([
@@ -104,7 +122,8 @@ export default function Analytics() {
               Last 7 Days
             </h3>
             <p className="text-3xl font-bold text-foreground">
-              {conversationStats.find((s) => s.name === "Last 7 Days")?.value || 0}
+              {conversationStats.find(s => s.name === "Last 7 Days")?.value ||
+                0}
             </p>
           </Card>
         </div>
@@ -113,7 +132,9 @@ export default function Analytics() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Model Usage Chart */}
           <Card className="p-6">
-            <h2 className="text-xl font-bold text-foreground mb-4">Model Usage</h2>
+            <h2 className="text-xl font-bold text-foreground mb-4">
+              Model Usage
+            </h2>
             {modelUsage.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={modelUsage}>
@@ -155,7 +176,10 @@ export default function Analytics() {
                     dataKey="value"
                   >
                     {conversationStats.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -171,10 +195,12 @@ export default function Analytics() {
 
         {/* Recent Activity */}
         <Card className="p-6 mt-6">
-          <h2 className="text-xl font-bold text-foreground mb-4">Recent Conversations</h2>
+          <h2 className="text-xl font-bold text-foreground mb-4">
+            Recent Conversations
+          </h2>
           {conversations && conversations.length > 0 ? (
             <div className="space-y-3">
-              {conversations.slice(0, 5).map((conv) => (
+              {conversations.slice(0, 5).map(conv => (
                 <div
                   key={conv.id}
                   className="flex items-center justify-between p-3 border border-border rounded hover:bg-muted transition-colors"

@@ -83,7 +83,7 @@ export const exportRouter = router({
           createdAt: conversation[0].createdAt,
           updatedAt: conversation[0].updatedAt,
         },
-        messages: conversationMessages.map((msg) => ({
+        messages: conversationMessages.map(msg => ({
           role: msg.role,
           content: msg.content,
           createdAt: msg.createdAt,
@@ -197,9 +197,9 @@ export const exportRouter = router({
         .from(messages)
         .where(eq(messages.conversationId, input.conversationId));
 
-      const userMessages = conversationMessages.filter((m) => m.role === "user");
+      const userMessages = conversationMessages.filter(m => m.role === "user");
       const assistantMessages = conversationMessages.filter(
-        (m) => m.role === "assistant"
+        m => m.role === "assistant"
       );
 
       const totalTokens = conversationMessages.reduce(
@@ -212,7 +212,9 @@ export const exportRouter = router({
         userMessages: userMessages.length,
         assistantMessages: assistantMessages.length,
         totalTokens,
-        averageTokensPerMessage: Math.round(totalTokens / conversationMessages.length),
+        averageTokensPerMessage: Math.round(
+          totalTokens / conversationMessages.length
+        ),
         createdAt: conversation[0].createdAt,
         updatedAt: conversation[0].updatedAt,
       };

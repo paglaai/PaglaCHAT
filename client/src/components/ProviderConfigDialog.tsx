@@ -41,7 +41,7 @@ export function ProviderConfigDialog({
       if (apiKey) config.apiKey = apiKey;
       if (baseUrl) config.baseUrl = baseUrl;
       if (localModelPath) config.localModelPath = localModelPath;
-      
+
       onSave(config);
       onClose();
     } finally {
@@ -49,9 +49,12 @@ export function ProviderConfigDialog({
     }
   };
 
-  const isLocalProvider = ["ollama", "lmstudio", "llama-cpp", "comfyui"].includes(
-    provider || ""
-  );
+  const isLocalProvider = [
+    "ollama",
+    "lmstudio",
+    "llama-cpp",
+    "comfyui",
+  ].includes(provider || "");
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -63,7 +66,10 @@ export function ProviderConfigDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue={isLocalProvider ? "local" : "cloud"} className="w-full">
+        <Tabs
+          defaultValue={isLocalProvider ? "local" : "cloud"}
+          className="w-full"
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="cloud">Cloud API</TabsTrigger>
             <TabsTrigger value="local">Local Setup</TabsTrigger>
@@ -84,7 +90,7 @@ export function ProviderConfigDialog({
                 type="password"
                 placeholder="Enter your API key"
                 value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
+                onChange={e => setApiKey(e.target.value)}
               />
             </div>
 
@@ -95,7 +101,7 @@ export function ProviderConfigDialog({
                 type="url"
                 placeholder="https://api.example.com"
                 value={baseUrl}
-                onChange={(e) => setBaseUrl(e.target.value)}
+                onChange={e => setBaseUrl(e.target.value)}
               />
             </div>
           </TabsContent>
@@ -115,7 +121,7 @@ export function ProviderConfigDialog({
                 type="text"
                 placeholder="/path/to/model.gguf"
                 value={localModelPath}
-                onChange={(e) => setLocalModelPath(e.target.value)}
+                onChange={e => setLocalModelPath(e.target.value)}
               />
             </div>
 
@@ -126,7 +132,7 @@ export function ProviderConfigDialog({
                 type="url"
                 placeholder="http://localhost:8000"
                 value={baseUrl}
-                onChange={(e) => setBaseUrl(e.target.value)}
+                onChange={e => setBaseUrl(e.target.value)}
               />
             </div>
           </TabsContent>

@@ -79,6 +79,7 @@ DirtyChat
 ## User Flows
 
 ### Flow 1: New User Onboarding
+
 1. User visits DirtyChat
 2. Redirected to OAuth login
 3. Authenticates with Manus account
@@ -90,6 +91,7 @@ DirtyChat
 9. Sends first message
 
 ### Flow 2: Multi-Model Conversation
+
 1. User opens existing conversation
 2. Conversation history loads
 3. User selects different model from dropdown
@@ -100,6 +102,7 @@ DirtyChat
 8. Conversation auto-saves
 
 ### Flow 3: Document Upload & RAG
+
 1. User navigates to Documents page
 2. Uploads PDF or text file
 3. System chunks document automatically
@@ -111,6 +114,7 @@ DirtyChat
 9. Response includes document context
 
 ### Flow 4: Voice Input
+
 1. User in chat interface
 2. Clicks microphone button
 3. Browser requests microphone permission
@@ -123,6 +127,7 @@ DirtyChat
 10. User can edit and send
 
 ### Flow 5: Image Generation
+
 1. User in chat interface
 2. Types image generation prompt
 3. Clicks image generation button
@@ -135,16 +140,19 @@ DirtyChat
 ## Content Hierarchy
 
 ### Primary Content
+
 - Chat messages (user and assistant)
 - Conversation history
 - User profile information
 
 ### Secondary Content
+
 - System prompts and descriptions
 - Model information and capabilities
 - Document metadata
 
 ### Tertiary Content
+
 - Help text and tooltips
 - Settings descriptions
 - Feature explanations
@@ -152,35 +160,45 @@ DirtyChat
 ## Data Organization
 
 ### Conversations
+
 Organized chronologically with most recent first. Users can search by title or content.
 
 ### Messages
+
 Grouped by conversation. Displayed chronologically within each conversation. Includes metadata (timestamp, model used, tokens consumed).
 
 ### Documents
+
 Organized by upload date. Searchable by filename. Includes metadata (size, format, upload date, chunk count).
 
 ### Models
+
 Grouped by provider (OpenAI, Anthropic, Groq, Together AI). Includes model capabilities and pricing information.
 
 ### System Prompts
+
 Categorized by type (General, Developer, Research, Data Analyst, Creative Writer). Each includes description and example usage.
 
 ## Interaction Patterns
 
 ### Conversation Selection
+
 Click on conversation in sidebar to load it. Visual indication of currently selected conversation.
 
 ### Model Switching
+
 Dropdown selector in sidebar. Switching models mid-conversation preserves history but uses new model for subsequent messages.
 
 ### Message Sending
+
 Enter key or click send button. Disabled when input is empty. Shows loading state during processing.
 
 ### Document Upload
+
 Drag and drop or click to select. Shows progress during upload and processing.
 
 ### Settings Management
+
 Tab-based navigation. Save buttons persist changes. Confirmation on destructive actions.
 
 ## Accessibility Considerations
@@ -195,11 +213,11 @@ Tab-based navigation. Save buttons persist changes. Confirmation on destructive 
 
 ## Responsive Design Breakpoints
 
-| Breakpoint | Width | Layout |
-|-----------|-------|--------|
-| Mobile | < 640px | Single column, stacked sidebar |
-| Tablet | 640px - 1024px | Flexible layout, collapsible sidebar |
-| Desktop | > 1024px | Two-column layout, fixed sidebar |
+| Breakpoint | Width          | Layout                               |
+| ---------- | -------------- | ------------------------------------ |
+| Mobile     | < 640px        | Single column, stacked sidebar       |
+| Tablet     | 640px - 1024px | Flexible layout, collapsible sidebar |
+| Desktop    | > 1024px       | Two-column layout, fixed sidebar     |
 
 ## Performance Considerations
 

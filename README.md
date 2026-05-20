@@ -11,12 +11,14 @@ A sophisticated, full-stack LLM chat application with support for multiple AI pr
 ## 🚀 Features
 
 ### Core Chat Functionality
+
 - **Multi-Model Support**: Seamlessly switch between OpenAI, Anthropic, Groq, Together AI, and local models
 - **Real-Time Streaming**: Stream responses token-by-token with markdown rendering
 - **Conversation Management**: Create, organize, archive, and search conversations
 - **Message History**: Persistent storage with full conversation context
 
 ### Advanced Features
+
 - **Retrieval-Augmented Generation (RAG)**: Upload documents and inject relevant context into LLM prompts
 - **Voice Input**: Hands-free chat using Whisper API transcription
 - **Image Generation**: Create and edit images from text prompts within conversations
@@ -24,6 +26,7 @@ A sophisticated, full-stack LLM chat application with support for multiple AI pr
 - **System Prompts Library**: Pre-built personas (General, Developer, Research, Data Analyst, Creative Writer)
 
 ### User Experience
+
 - **International Typographic Style Design**: Clean, grid-based layout with mathematical precision
 - **Mobile Optimization**: Fully responsive interface for mobile, tablet, and desktop
 - **User Settings**: Manage API keys, preferences, and profile information
@@ -45,6 +48,7 @@ A sophisticated, full-stack LLM chat application with support for multiple AI pr
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 22.13.0 or higher
 - pnpm 10.4.1 or higher
 - MySQL/TiDB database
@@ -178,90 +182,101 @@ pnpm start
 ### Chat Router
 
 #### Create Conversation
+
 ```typescript
 trpc.chat.createConversation.mutate({
   title: "My Conversation",
   modelId: 1,
-  systemPromptId: 1
-})
+  systemPromptId: 1,
+});
 ```
 
 #### Send Message
+
 ```typescript
 trpc.chat.sendMessage.mutate({
   conversationId: 1,
   message: "Hello, how are you?",
-  useRAG: true
-})
+  useRAG: true,
+});
 ```
 
 #### List Conversations
+
 ```typescript
-const conversations = await trpc.chat.listConversations.useQuery()
+const conversations = await trpc.chat.listConversations.useQuery();
 ```
 
 #### List Models
+
 ```typescript
-const models = await trpc.chat.listModels.useQuery()
+const models = await trpc.chat.listModels.useQuery();
 ```
 
 #### List System Prompts
+
 ```typescript
-const prompts = await trpc.chat.listSystemPrompts.useQuery()
+const prompts = await trpc.chat.listSystemPrompts.useQuery();
 ```
 
 ### Documents Router
 
 #### Upload Document
+
 ```typescript
 trpc.documents.uploadDocument.mutate({
   title: "My Document",
   fileName: "document.pdf",
   fileType: "application/pdf",
-  content: "Document content here..."
-})
+  content: "Document content here...",
+});
 ```
 
 #### Search Documents
+
 ```typescript
 const results = await trpc.documents.searchDocuments.useQuery({
   query: "search term",
-  limit: 5
-})
+  limit: 5,
+});
 ```
 
 ### Voice Router
 
 #### Transcribe Audio
+
 ```typescript
 const result = await trpc.voice.transcribeAudio.mutate({
   audioUrl: "https://example.com/audio.webm",
-  language: "en"
-})
+  language: "en",
+});
 ```
 
 ### Images Router
 
 #### Generate Image
+
 ```typescript
 const result = await trpc.images.generateImage.mutate({
   prompt: "A serene landscape",
-  conversationId: 1
-})
+  conversationId: 1,
+});
 ```
 
 #### Edit Image
+
 ```typescript
 const result = await trpc.images.editImage.mutate({
   imageUrl: "https://example.com/image.png",
   prompt: "Add a rainbow",
-  conversationId: 1
-})
+  conversationId: 1,
+});
 ```
 
 ## 🗄️ Database Schema
 
 ### Users
+
 Stores user account information and authentication details.
 
 ```sql
@@ -279,6 +294,7 @@ CREATE TABLE users (
 ```
 
 ### Conversations
+
 Stores chat conversation metadata.
 
 ```sql
@@ -298,6 +314,7 @@ CREATE TABLE conversations (
 ```
 
 ### Messages
+
 Stores individual chat messages.
 
 ```sql
@@ -313,6 +330,7 @@ CREATE TABLE messages (
 ```
 
 ### Models
+
 Stores available LLM models and configurations.
 
 ```sql
@@ -330,6 +348,7 @@ CREATE TABLE models (
 ```
 
 ### System Prompts
+
 Stores pre-built assistant personalities.
 
 ```sql
@@ -344,6 +363,7 @@ CREATE TABLE systemPrompts (
 ```
 
 ### Documents
+
 Stores uploaded documents for RAG.
 
 ```sql
@@ -361,6 +381,7 @@ CREATE TABLE documents (
 ```
 
 ### Document Chunks
+
 Stores chunked document content.
 
 ```sql
@@ -378,6 +399,7 @@ CREATE TABLE documentChunks (
 ## 🚀 Deployment
 
 ### Prerequisites
+
 - Docker and Docker Compose
 - AWS S3 bucket for file storage
 - MySQL/TiDB database
@@ -386,11 +408,13 @@ CREATE TABLE documentChunks (
 ### Deployment Steps
 
 1. **Build the application**
+
    ```bash
    pnpm build
    ```
 
 2. **Set production environment variables**
+
    ```bash
    export DATABASE_URL=mysql://...
    export JWT_SECRET=...
@@ -398,6 +422,7 @@ CREATE TABLE documentChunks (
    ```
 
 3. **Run database migrations**
+
    ```bash
    pnpm db:push
    ```
@@ -436,12 +461,14 @@ Contributions are welcome! Please follow these steps:
 5. Open a Pull Request
 
 ### Code Style
+
 - Use TypeScript for all new code
 - Follow ESLint configuration
 - Run `pnpm format` before committing
 - Write tests for new features
 
 ### Commit Messages
+
 - Use conventional commits format
 - Examples: `feat: add voice input`, `fix: resolve chat streaming issue`, `docs: update README`
 

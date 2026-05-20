@@ -104,7 +104,7 @@ export const toolsRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
-      const toolDef = AVAILABLE_TOOLS.find((t) => t.name === input.toolName);
+      const toolDef = AVAILABLE_TOOLS.find(t => t.name === input.toolName);
       if (!toolDef) {
         throw new Error("Tool not found");
       }
@@ -155,7 +155,11 @@ export const toolsRouter = router({
         .where(eq(tools.name, input.toolName))
         .limit(1);
 
-      if (!userTool || userTool.length === 0 || !(userTool[0] as any).isEnabled) {
+      if (
+        !userTool ||
+        userTool.length === 0 ||
+        !(userTool[0] as any).isEnabled
+      ) {
         throw new Error("Tool not enabled");
       }
 
