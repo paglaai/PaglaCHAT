@@ -22,8 +22,8 @@ export const voiceRouter = router({
 
         const response = result as any;
         return {
-          text: response.text || '',
-          language: response.language || 'en',
+          text: response.text || "",
+          language: response.language || "en",
           duration: response.duration,
           segments: response.segments || [],
         };

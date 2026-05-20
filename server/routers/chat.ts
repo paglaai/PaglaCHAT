@@ -1,8 +1,22 @@
 import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
-import { getUserConversations, getConversationWithMessages, addMessage, getActiveModels, getSystemPrompts, getUserDocuments } from "../db";
+import {
+  getUserConversations,
+  getConversationWithMessages,
+  addMessage,
+  getActiveModels,
+  getSystemPrompts,
+  getUserDocuments,
+} from "../db";
 import { getDb } from "../db";
-import { conversations, messages, models, systemPrompts, documents, documentChunks } from "../../drizzle/schema";
+import {
+  conversations,
+  messages,
+  models,
+  systemPrompts,
+  documents,
+  documentChunks,
+} from "../../drizzle/schema";
 import { eq, desc, inArray } from "drizzle-orm";
 import { invokeLLM } from "../_core/llm";
 
@@ -16,7 +30,9 @@ export const chatRouter = router({
   getConversation: protectedProcedure
     .input(z.object({ conversationId: z.number() }))
     .query(async ({ input, ctx }) => {
-      const conversation = await getConversationWithMessages(input.conversationId);
+      const conversation = await getConversationWithMessages(
+        input.conversationId
+      );
       if (!conversation) {
         throw new Error("Conversation not found");
       }
@@ -125,9 +141,12 @@ export const chatRouter = router({
             .limit(3);
 
           if (relevantChunks.length > 0) {
-            ragContext = "\n\nRelevant document excerpts:\n" +
+            ragContext =
+              "\n\nRelevant document excerpts:\n" +
               relevantChunks
-                .map((chunk: any) => `- ${chunk.chunkText.substring(0, 200)}...`)
+                .map(
+                  (chunk: any) => `- ${chunk.chunkText.substring(0, 200)}...`
+                )
                 .join("\n");
           }
         }
@@ -151,8 +170,11 @@ export const chatRouter = router({
 
       const assistantContent =
         response.choices[0]?.message?.content || "Unable to generate response";
-      
-      const contentStr = typeof assistantContent === 'string' ? assistantContent : JSON.stringify(assistantContent);
+
+      const contentStr =
+        typeof assistantContent === "string"
+          ? assistantContent
+          : JSON.stringify(assistantContent);
 
       // Add assistant message
       await addMessage(input.conversationId, "assistant", contentStr);

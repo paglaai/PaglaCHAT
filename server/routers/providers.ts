@@ -10,7 +10,22 @@ export const providersRouter = router({
   listProviders: publicProcedure.query(async () => {
     // In production, fetch from database
     // For now, return the provider list from MultiProviderLLMService
-    const providerTypes: Array<"openai" | "anthropic" | "groq" | "gemini" | "openrouter" | "ollama" | "lmstudio" | "llama-cpp" | "llamabarn" | "qwen" | "zhipu" | "kimi" | "comfyui" | "together"> = [
+    const providerTypes: Array<
+      | "openai"
+      | "anthropic"
+      | "groq"
+      | "gemini"
+      | "openrouter"
+      | "ollama"
+      | "lmstudio"
+      | "llama-cpp"
+      | "llamabarn"
+      | "qwen"
+      | "zhipu"
+      | "kimi"
+      | "comfyui"
+      | "together"
+    > = [
       "openai",
       "anthropic",
       "groq",
@@ -27,7 +42,7 @@ export const providersRouter = router({
       "together",
     ];
 
-    return providerTypes.map((provider) => {
+    return providerTypes.map(provider => {
       const info = MultiProviderLLMService.getProviderInfo(provider);
       return {
         id: provider,
@@ -95,7 +110,14 @@ export const providersRouter = router({
       z.object({
         modelPath: z.string(),
         format: z.enum(["gguf", "mlx", "safetensors"]),
-        quantization: z.enum(["Q4_K_M", "Q5_K_S", "Q6_K", "Q8_0", "F16", "F32"]),
+        quantization: z.enum([
+          "Q4_K_M",
+          "Q5_K_S",
+          "Q6_K",
+          "Q8_0",
+          "F16",
+          "F32",
+        ]),
         maxMemoryGB: z.number().default(12),
       })
     )
@@ -183,7 +205,14 @@ export const providersRouter = router({
       z.object({
         modelPath: z.string(),
         format: z.enum(["gguf", "mlx", "safetensors"]),
-        quantization: z.enum(["Q4_K_M", "Q5_K_S", "Q6_K", "Q8_0", "F16", "F32"]),
+        quantization: z.enum([
+          "Q4_K_M",
+          "Q5_K_S",
+          "Q6_K",
+          "Q8_0",
+          "F16",
+          "F32",
+        ]),
       })
     )
     .query(async ({ input }) => {

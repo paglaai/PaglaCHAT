@@ -1,7 +1,15 @@
 import { eq, desc, asc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, conversations, messages, models, systemPrompts, documents } from "../drizzle/schema";
-import { ENV } from './_core/env';
+import {
+  InsertUser,
+  users,
+  conversations,
+  messages,
+  models,
+  systemPrompts,
+  documents,
+} from "../drizzle/schema";
+import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -56,8 +64,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       values.role = user.role;
       updateSet.role = user.role;
     } else if (user.openId === ENV.ownerOpenId) {
-      values.role = 'admin';
-      updateSet.role = 'admin';
+      values.role = "admin";
+      updateSet.role = "admin";
     }
 
     if (!values.lastSignedIn) {
@@ -84,7 +92,11 @@ export async function getUserByOpenId(openId: string) {
     return undefined;
   }
 
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.openId, openId))
+    .limit(1);
 
   return result.length > 0 ? result[0] : undefined;
 }
@@ -93,20 +105,32 @@ export async function getUserByOpenId(openId: string) {
 export async function getUserConversations(userId: number) {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(conversations).where(eq(conversations.userId, userId)).orderBy(desc(conversations.updatedAt));
+  return db
+    .select()
+    .from(conversations)
+    .where(eq(conversations.userId, userId))
+    .orderBy(desc(conversations.updatedAt));
 }
 
 export async function getConversationWithMessages(conversationId: number) {
   const db = await getDb();
   if (!db) return null;
-  const result = await db.select().from(conversations).where(eq(conversations.id, conversationId)).limit(1);
+  const result = await db
+    .select()
+    .from(conversations)
+    .where(eq(conversations.id, conversationId))
+    .limit(1);
   return result.length > 0 ? result[0] : null;
 }
 
 // Message queries
-export async function addMessage(conversationId: number, role: string, content: string) {
+export async function addMessage(
+  conversationId: number,
+  role: string,
+  content: string
+) {
   const db = await getDb();
-  if (!db) throw new Error('Database not available');
+  if (!db) throw new Error("Database not available");
   const result = await db.insert(messages).values({
     conversationId,
     role: role as any,
@@ -126,14 +150,21 @@ export async function getActiveModels() {
 export async function getSystemPrompts() {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(systemPrompts).where(eq(systemPrompts.isActive, true));
+  return db
+    .select()
+    .from(systemPrompts)
+    .where(eq(systemPrompts.isActive, true));
 }
 
 // Document queries
 export async function getUserDocuments(userId: number) {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(documents).where(eq(documents.userId, userId)).orderBy(desc(documents.createdAt));
+  return db
+    .select()
+    .from(documents)
+    .where(eq(documents.userId, userId))
+    .orderBy(desc(documents.createdAt));
 }
 
 // TODO: add more feature queries here as your schema grows.
