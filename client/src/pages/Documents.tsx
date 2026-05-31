@@ -3,6 +3,22 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Loader2, Upload, Trash2, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 
@@ -195,22 +211,53 @@ export default function Documents() {
                     </div>
 
                     <div className="flex gap-2 ml-4">
-                      <a
-                        href={doc.s3Url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 border border-border hover:bg-muted transition-colors"
-                        title="Download"
-                      >
-                        <Download className="w-4 h-4 text-foreground" />
-                      </a>
-                      <button
-                        onClick={() => handleDelete(doc.id)}
-                        className="p-2 border border-border hover:bg-destructive hover:text-destructive-foreground transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <a
+                            href={doc.s3Url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 border border-border hover:bg-muted transition-colors"
+                            aria-label="Download document"
+                          >
+                            <Download className="w-4 h-4 text-foreground" />
+                          </a>
+                        </TooltipTrigger>
+                        <TooltipContent>Download document</TooltipContent>
+                      </Tooltip>
+                      <AlertDialog>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <AlertDialogTrigger asChild>
+                              <button
+                                className="p-2 border border-border hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                                aria-label="Delete document"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </AlertDialogTrigger>
+                          </TooltipTrigger>
+                          <TooltipContent>Delete document</TooltipContent>
+                        </Tooltip>
+                        <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Document</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete "{doc.title}"? This
+                              action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(doc.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                 </div>
