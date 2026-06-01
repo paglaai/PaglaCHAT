@@ -6,12 +6,21 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Save, LogOut, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export default function Settings() {
   const { user, logout } = useAuth();
   const [, navigate] = useLocation();
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"profile" | "api-keys" | "preferences">("profile");
+  const [activeTab, setActiveTab] = useState<
+    "profile" | "api-keys" | "preferences"
+  >("profile");
 
   // API Keys state
   const [apiKeys, setApiKeys] = useState({
@@ -87,12 +96,18 @@ export default function Settings() {
       <div className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/")}
-              className="p-2 hover:bg-muted transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => navigate("/")}
+                  className="p-2 hover:bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-sm"
+                  aria-label="Back to home"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Back to home</TooltipContent>
+            </Tooltip>
             <h1 className="text-2xl font-bold text-foreground">Settings</h1>
           </div>
         </div>
@@ -142,7 +157,9 @@ export default function Settings() {
             {activeTab === "profile" && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground mb-4">Profile Information</h2>
+                  <h2 className="text-xl font-semibold text-foreground mb-4">
+                    Profile Information
+                  </h2>
                   <div className="space-y-4 border border-border bg-card p-6">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
@@ -169,7 +186,11 @@ export default function Settings() {
                         Member Since
                       </label>
                       <Input
-                        value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
+                        value={
+                          user?.createdAt
+                            ? new Date(user.createdAt).toLocaleDateString()
+                            : ""
+                        }
                         disabled
                         className="bg-muted"
                       />
@@ -178,7 +199,9 @@ export default function Settings() {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground mb-4">Account Actions</h2>
+                  <h2 className="text-xl font-semibold text-foreground mb-4">
+                    Account Actions
+                  </h2>
                   <div className="space-y-3">
                     <Button
                       onClick={handleLogout}
@@ -197,9 +220,12 @@ export default function Settings() {
             {activeTab === "api-keys" && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground mb-2">API Keys</h2>
+                  <h2 className="text-xl font-semibold text-foreground mb-2">
+                    API Keys
+                  </h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Add your API keys for cloud LLM providers. Keys are encrypted and never shared.
+                    Add your API keys for cloud LLM providers. Keys are
+                    encrypted and never shared.
                   </p>
 
                   <div className="space-y-4 border border-border bg-card p-6">
@@ -211,12 +237,20 @@ export default function Settings() {
                         type="password"
                         placeholder="sk-..."
                         value={apiKeys.openai}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, openai: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">platform.openai.com</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://platform.openai.com/api-keys"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          platform.openai.com
+                        </a>
                       </p>
                     </div>
 
@@ -228,12 +262,20 @@ export default function Settings() {
                         type="password"
                         placeholder="sk-ant-..."
                         value={apiKeys.anthropic}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, anthropic: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">console.anthropic.com</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://console.anthropic.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          console.anthropic.com
+                        </a>
                       </p>
                     </div>
 
@@ -245,12 +287,20 @@ export default function Settings() {
                         type="password"
                         placeholder="gsk_..."
                         value={apiKeys.groq}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, groq: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">console.groq.com</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://console.groq.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          console.groq.com
+                        </a>
                       </p>
                     </div>
 
@@ -262,17 +312,27 @@ export default function Settings() {
                         type="password"
                         placeholder="..."
                         value={apiKeys.together}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, together: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://www.together.ai/account/api-keys" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">together.ai</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://www.together.ai/account/api-keys"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          together.ai
+                        </a>
                       </p>
                     </div>
 
                     <div className="border-t border-border pt-4 mt-4">
-                      <h3 className="text-sm font-semibold text-foreground mb-3">Additional Providers</h3>
+                      <h3 className="text-sm font-semibold text-foreground mb-3">
+                        Additional Providers
+                      </h3>
                     </div>
 
                     <div>
@@ -283,12 +343,20 @@ export default function Settings() {
                         type="password"
                         placeholder="AIza..."
                         value={apiKeys.gemini}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, gemini: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">aistudio.google.com</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://aistudio.google.com/app/apikey"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          aistudio.google.com
+                        </a>
                       </p>
                     </div>
 
@@ -300,12 +368,20 @@ export default function Settings() {
                         type="password"
                         placeholder="sk-or-..."
                         value={apiKeys.openrouter}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, openrouter: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">openrouter.ai</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://openrouter.ai/keys"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          openrouter.ai
+                        </a>
                       </p>
                     </div>
 
@@ -317,12 +393,20 @@ export default function Settings() {
                         type="password"
                         placeholder="..."
                         value={apiKeys.llamabarn}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, llamabarn: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://llamabarn.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">llamabarn.com</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://llamabarn.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          llamabarn.com
+                        </a>
                       </p>
                     </div>
 
@@ -334,12 +418,20 @@ export default function Settings() {
                         type="password"
                         placeholder="..."
                         value={apiKeys.qwen}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, qwen: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://dashscope.aliyun.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">dashscope.aliyun.com</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://dashscope.aliyun.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          dashscope.aliyun.com
+                        </a>
                       </p>
                     </div>
 
@@ -351,12 +443,20 @@ export default function Settings() {
                         type="password"
                         placeholder="..."
                         value={apiKeys.zhipu}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, zhipu: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://open.bigmodel.cn" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">open.bigmodel.cn</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://open.bigmodel.cn"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          open.bigmodel.cn
+                        </a>
                       </p>
                     </div>
 
@@ -368,12 +468,20 @@ export default function Settings() {
                         type="password"
                         placeholder="..."
                         value={apiKeys.kimi}
-                        onChange={(e) =>
+                        onChange={e =>
                           setApiKeys({ ...apiKeys, kimi: e.target.value })
                         }
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Get your key from <a href="https://platform.moonshot.cn" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">platform.moonshot.cn</a>
+                        Get your key from{" "}
+                        <a
+                          href="https://platform.moonshot.cn"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          platform.moonshot.cn
+                        </a>
                       </p>
                     </div>
                   </div>
@@ -403,7 +511,9 @@ export default function Settings() {
             {activeTab === "preferences" && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground mb-4">Preferences</h2>
+                  <h2 className="text-xl font-semibold text-foreground mb-4">
+                    Preferences
+                  </h2>
 
                   <div className="space-y-4 border border-border bg-card p-6">
                     <div>
@@ -412,7 +522,7 @@ export default function Settings() {
                       </label>
                       <select
                         value={preferences.defaultModel}
-                        onChange={(e) =>
+                        onChange={e =>
                           setPreferences({
                             ...preferences,
                             defaultModel: e.target.value,
@@ -435,7 +545,7 @@ export default function Settings() {
                       </label>
                       <select
                         value={preferences.defaultSystemPrompt}
-                        onChange={(e) =>
+                        onChange={e =>
                           setPreferences({
                             ...preferences,
                             defaultSystemPrompt: e.target.value,
@@ -452,36 +562,40 @@ export default function Settings() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="auto-save"
+                        className="text-sm font-medium text-foreground cursor-pointer"
+                      >
                         Auto-save Conversations
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="auto-save"
                         checked={preferences.autoSaveConversations}
-                        onChange={(e) =>
+                        onCheckedChange={checked =>
                           setPreferences({
                             ...preferences,
-                            autoSaveConversations: e.target.checked,
+                            autoSaveConversations: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="notifications"
+                        className="text-sm font-medium text-foreground cursor-pointer"
+                      >
                         Enable Notifications
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="notifications"
                         checked={preferences.enableNotifications}
-                        onChange={(e) =>
+                        onCheckedChange={checked =>
                           setPreferences({
                             ...preferences,
-                            enableNotifications: e.target.checked,
+                            enableNotifications: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
@@ -491,7 +605,7 @@ export default function Settings() {
                       </label>
                       <select
                         value={preferences.theme}
-                        onChange={(e) =>
+                        onChange={e =>
                           setPreferences({
                             ...preferences,
                             theme: e.target.value,
