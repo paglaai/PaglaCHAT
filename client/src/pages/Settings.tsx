@@ -3,6 +3,13 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Loader2, Save, LogOut, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -87,12 +94,18 @@ export default function Settings() {
       <div className="border-b border-border bg-card sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/")}
-              className="p-2 hover:bg-muted transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => navigate("/")}
+                  className="p-2 hover:bg-muted transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                  aria-label="Back to chat"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Back to chat</TooltipContent>
+            </Tooltip>
             <h1 className="text-2xl font-bold text-foreground">Settings</h1>
           </div>
         </div>
@@ -452,36 +465,34 @@ export default function Settings() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label htmlFor="auto-save" className="text-sm font-medium text-foreground cursor-pointer">
                         Auto-save Conversations
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="auto-save"
                         checked={preferences.autoSaveConversations}
-                        onChange={(e) =>
+                        onCheckedChange={(checked) =>
                           setPreferences({
                             ...preferences,
-                            autoSaveConversations: e.target.checked,
+                            autoSaveConversations: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
+                      <Label htmlFor="notifications" className="text-sm font-medium text-foreground cursor-pointer">
                         Enable Notifications
-                      </label>
-                      <input
-                        type="checkbox"
+                      </Label>
+                      <Switch
+                        id="notifications"
                         checked={preferences.enableNotifications}
-                        onChange={(e) =>
+                        onCheckedChange={(checked) =>
                           setPreferences({
                             ...preferences,
-                            enableNotifications: e.target.checked,
+                            enableNotifications: checked,
                           })
                         }
-                        className="w-4 h-4"
                       />
                     </div>
 
